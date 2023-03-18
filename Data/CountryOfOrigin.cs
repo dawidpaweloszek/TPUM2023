@@ -4,10 +4,13 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Logic
+namespace Data
 {
-    public class Class1
+    public enum CountryOfOrigin
     {
-
+        Poland,
+        Germany,
+        USA,
+        Russia
     }
 }
