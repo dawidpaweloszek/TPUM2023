@@ -9,59 +9,108 @@
     <Window.DataContext>
         <vm:MainWindowViewModel />
     </Window.DataContext>
-    <Canvas Width="900" Height="600">
-        <StackPanel Orientation="Vertical">
-            <StackPanel Orientation="Horizontal" Width="900" Height="100">
-                <Button Content="Topory" MinHeight="100" MinWidth="150" Margin="5 0" Command= "{Binding AxesButtonClick}"/>
-                <Button Content="Młoty" MinHeight="100" MinWidth="150" Margin="5 0" Command= "{Binding HammersButtonClick}"/>
-                <Button Content="Katany" MinHeight="100" MinWidth="150" Margin="5 0" Command= "{Binding KatanasButtonClick}"/>
-                <Button Content="Miecze" MinHeight="100" MinWidth="150" Margin="5 0" Command= "{Binding SwordsButtonClick}"/>
-                <Button Content="Koszyk" MinHeight="100" MinWidth="150" Margin="50 0" Command= "{Binding BasketButtonClick}"/>
-            </StackPanel>
+    <Grid>
+        <Canvas Width="900" Height="600" x:Name="MainView" Visibility="{Binding MainViewVisibility}">
+            <StackPanel Orientation="Vertical">
+                <StackPanel Orientation="Horizontal" Width="900" Height="100">
+                    <Button Content="Topory" MinHeight="100" MinWidth="150" Margin="5 0" Command= "{Binding AxesButtonClick}"/>
+                    <Button Content="Młoty" MinHeight="100" MinWidth="150" Margin="5 0" Command= "{Binding HammersButtonClick}"/>
+                    <Button Content="Katany" MinHeight="100" MinWidth="150" Margin="5 0" Command= "{Binding KatanasButtonClick}"/>
+                    <Button Content="Miecze" MinHeight="100" MinWidth="150" Margin="5 0" Command= "{Binding SwordsButtonClick}"/>
+                    <Button Content="Koszyk" MinHeight="100" MinWidth="150" Margin="50 0" Command= "{Binding BasketButtonClick}"/>
+                </StackPanel>
 
-            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
-                <TextBlock x:Name="PromotionLink" FontSize="28">
-                    <Hyperlink NavigateUri="Reviews.xaml">!!! Bronie są ostrzone wyłącznie przez kowala !!!</Hyperlink>
-                </TextBlock>
-            </StackPanel>
+                <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                    <TextBlock x:Name="PromotionLink" FontSize="28">
+                    <Hyperlink>!!! SKUP TOPORÓW !!!</Hyperlink>
+                    </TextBlock>
+                </StackPanel>
 
-            <StackPanel Orientation="Horizontal">
-                <ScrollViewer VerticalScrollBarVisibility="Visible" Height="450">
-                    <ItemsControl>
-                        <Button Width="800" Height="100" Margin="40 10">
-                            <StackPanel Orientation="Horizontal" HorizontalAlignment="Left">
-                                <Image Source="fantasyToporek.png" Margin="50 0"></Image>
-                                <TextBlock VerticalAlignment="Center" FontSize="25" Margin="50 0">Battle Axe</TextBlock>
-                                <TextBlock VerticalAlignment="Center" FontSize="25" Margin="50 0">2137 zł</TextBlock>
-                            </StackPanel>
-                        </Button>
-                        <Button Width="800" Height="100" Margin="40 10">
-                            <StackPanel Orientation="Horizontal" HorizontalAlignment="Left">
-                                <Image Source="fantasyMlotek.png" Margin="50 0"></Image>
-                                <TextBlock VerticalAlignment="Center" FontSize="25" Margin="50 0">War Hammer</TextBlock>
-                                <TextBlock VerticalAlignment="Center" FontSize="25" Margin="50 0">100.50 zł</TextBlock>
-                            </StackPanel>
-                        </Button>
-                        <Button Width="800" Height="100" Margin="40 10">
-                            <StackPanel Orientation="Horizontal" HorizontalAlignment="Left">
-                                <Image Source="japonskiNozyk.png" Margin="50 0"></Image>
-                                <TextBlock VerticalAlignment="Center" FontSize="25" Margin="50 0">Katana</TextBlock>
-                                <TextBlock VerticalAlignment="Center" FontSize="25" Margin="50 0">420.42 zł</TextBlock>
-                            </StackPanel>
-                        </Button>
-                        <Button Width="800" Height="100" Margin="40 10">
-                            <StackPanel Orientation="Horizontal" HorizontalAlignment="Left">
-                                <Image Source="celtyckiNozyk.png" Margin="50 0"></Image>
-                                <TextBlock VerticalAlignment="Center" FontSize="25" Margin="50 0">Celtic Sword</TextBlock>
-                                <TextBlock VerticalAlignment="Center" FontSize="25" Margin="50 0">299 zł</TextBlock>
-                            </StackPanel>
-                        </Button>
-                        <Button Width="800" Height="100" Margin="40 10"></Button>
-                        <Button Width="800" Height="100" Margin="40 10"></Button>
-                    </ItemsControl>
-                </ScrollViewer>
+                <StackPanel Orientation="Horizontal">
+                    <ScrollViewer VerticalScrollBarVisibility="Visible" Height="450">
+                        <ItemsControl>
+                            <Button Width="800" Height="100" Margin="40 10">
+                                <StackPanel Orientation="Horizontal" HorizontalAlignment="Left">
+                                    <Image Source="fantasyToporek.png" Margin="50 0"></Image>
+                                    <TextBlock VerticalAlignment="Center" FontSize="25" Margin="50 0">Topór</TextBlock>
+                                    <TextBlock VerticalAlignment="Center" FontSize="25" Margin="50 0">2137 zł</TextBlock>
+                                </StackPanel>
+                            </Button>
+                            <Button Width="800" Height="100" Margin="40 10">
+                                <StackPanel Orientation="Horizontal" HorizontalAlignment="Left">
+                                    <Image Source="fantasyMlotek.png" Margin="50 0"></Image>
+                                    <TextBlock VerticalAlignment="Center" FontSize="25" Margin="50 0">Młot</TextBlock>
+                                    <TextBlock VerticalAlignment="Center" FontSize="25" Margin="50 0">696 zł</TextBlock>
+                                </StackPanel>
+                            </Button>
+                            <Button Width="800" Height="100" Margin="40 10">
+                                <StackPanel Orientation="Horizontal" HorizontalAlignment="Left">
+                                    <Image Source="japonskiNozyk.png" Margin="50 0"></Image>
+                                    <TextBlock VerticalAlignment="Center" FontSize="25" Margin="50 0">Katana</TextBlock>
+                                    <TextBlock VerticalAlignment="Center" FontSize="25" Margin="50 0">420 zł</TextBlock>
+                                </StackPanel>
+                            </Button>
+                            <Button Width="800" Height="100" Margin="40 10">
+                                <StackPanel Orientation="Horizontal" HorizontalAlignment="Left">
+                                    <Image Source="celtyckiNozyk.png" Margin="50 0"></Image>
+                                    <TextBlock VerticalAlignment="Center" FontSize="25" Margin="50 0">Miecz</TextBlock>
+                                    <TextBlock VerticalAlignment="Center" FontSize="25" Margin="50 0">199 zł</TextBlock>
+                                </StackPanel>
+                            </Button>
+                            <Button Width="800" Height="100" Margin="40 10"></Button>
+                            <Button Width="800" Height="100" Margin="40 10"></Button>
+                        </ItemsControl>
+                    </ScrollViewer>
+                </StackPanel>
             </StackPanel>
+        </Canvas>
 
-        </StackPanel>
-    </Canvas>
+        <Canvas Width="900" Height="600" x:Name="BasketView" Visibility="{Binding BasketViewVisibility}">
+            <StackPanel Orientation="Vertical">
+                <StackPanel Orientation="Horizontal" Width="900" Height="100">
+                    <Button Content="Strona główna" MinHeight="100" MinWidth="150" Margin="5 0" Command= "{Binding MainPageButtonClick}"/>
+                </StackPanel>
+
+                <StackPanel Orientation="Horizontal">
+                    <ScrollViewer VerticalScrollBarVisibility="Visible" Height="300">
+                        <ItemsControl>
+                            <Button Width="800" Height="100" Margin="40 10">
+                                <StackPanel Orientation="Horizontal" HorizontalAlignment="Left">
+                                    <Image Source="fantasyToporek.png" Margin="50 0"></Image>
+                                    <TextBlock VerticalAlignment="Center" FontSize="25" Margin="50 0">Topór</TextBlock>
+                                    <TextBlock VerticalAlignment="Center" FontSize="25" Margin="50 0">2137 zł</TextBlock>
+                                </StackPanel>
+                            </Button>
+                            <Button Width="800" Height="100" Margin="40 10">
+                                <StackPanel Orientation="Horizontal" HorizontalAlignment="Left">
+                                    <Image Source="fantasyMlotek.png" Margin="50 0"></Image>
+                                    <TextBlock VerticalAlignment="Center" FontSize="25" Margin="50 0">Młot</TextBlock>
+                                    <TextBlock VerticalAlignment="Center" FontSize="25" Margin="50 0">696 zł</TextBlock>
+                                </StackPanel>
+                            </Button>
+                            <Button Width="800" Height="100" Margin="40 10">
+                                <StackPanel Orientation="Horizontal" HorizontalAlignment="Left">
+                                    <Image Source="japonskiNozyk.png" Margin="50 0"></Image>
+                                    <TextBlock VerticalAlignment="Center" FontSize="25" Margin="50 0">Katana</TextBlock>
+                                    <TextBlock VerticalAlignment="Center" FontSize="25" Margin="50 0">420 zł</TextBlock>
+                                </StackPanel>
+                            </Button>
+                            <Button Width="800" Height="100" Margin="40 10">
+                                <StackPanel Orientation="Horizontal" HorizontalAlignment="Left">
+                                    <Image Source="celtyckiNozyk.png" Margin="50 0"></Image>
+                                    <TextBlock VerticalAlignment="Center" FontSize="25" Margin="50 0">Miecz</TextBlock>
+                                    <TextBlock VerticalAlignment="Center" FontSize="25" Margin="50 0">199 zł</TextBlock>
+                                </StackPanel>
+                            </Button>
+                        </ItemsControl>
+                    </ScrollViewer>
+                </StackPanel>
+                <StackPanel Orientation="Horizontal">
+                    <Button Content="Kup" Width="300" Height="200" FontSize="36" Margin="30" Command= "{Binding BuyButtonClick}"></Button>
+                    <TextBlock VerticalAlignment="Center" FontSize="48" Margin="100 0">Kwota</TextBlock>
+                </StackPanel>
+
+            </StackPanel>
+        </Canvas>
+    </Grid>
 </Window>

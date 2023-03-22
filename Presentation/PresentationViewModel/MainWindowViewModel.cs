@@ -1,28 +1,35 @@
-﻿using System.Collections.Generic;
+﻿using GalaSoft.MvvmLight.Views;
+using GalaSoft.MvvmLight.Ioc;
+using System;
+using System.Collections.Generic;
 using System.Windows.Input;
 using PresentationModel;
 using PresentationViewModel.MVVMLight;
 
 namespace PresentationViewModel
 {
-  public class MainWindowViewModel : ViewModelBase
+    public class MainWindowViewModel : ViewModelBase
 
-  {
-    #region public API
-
-    public MainWindowViewModel() : this(ModelAbstractApi.CreateApi())
     {
-    }
+        #region public API
 
-    public MainWindowViewModel(ModelAbstractApi modelAbstractApi)
-    {
-      ModelLayer = modelAbstractApi;
-      Radious = ModelLayer.Radius;
-      ColorString = ModelLayer.ColorString;
-      ButtomClick = new RelayCommand(() => ClickHandler());
-    }
+        public MainWindowViewModel() : this(ModelAbstractApi.CreateApi())
+        {
+        }
 
-    public string ColorString
+        public MainWindowViewModel(ModelAbstractApi modelAbstractApi)
+        {
+            ModelLayer = modelAbstractApi;
+            Radious = ModelLayer.Radius;
+            ColorString = ModelLayer.ColorString;
+            MainViewVisibility = ModelLayer.MainViewVisibility;
+            BasketViewVisibility = ModelLayer.BasketViewVisibility;
+            ButtomClick = new RelayCommand(() => ClickHandler());
+            BasketButtonClick = new RelayCommand(() => BasketButtonClickHandler());
+            MainPageButtonClick = new RelayCommand(() => MainPagetButtonClickHandler());
+        }
+
+        public string ColorString
         {
             get
             {
@@ -37,54 +44,102 @@ namespace PresentationViewModel
             }
         }
 
-    public IList<object> CirclesCollection
-    {
-      get
-      {
-        return b_CirclesCollection;
-      }
-      set
-      {
-        if (value.Equals(b_CirclesCollection))
-          return;
-        RaisePropertyChanged("CirclesCollection");
-      }
-    }
+        public string MainViewVisibility
+        {
+            get
+            {
+                return b_mainViewVisibility;
+            }
+            set
+            {
+                if (value.Equals(b_mainViewVisibility))
+                    return;
+                b_mainViewVisibility = value;
+                RaisePropertyChanged("MainViewVisibility");
+            }
+        }
 
-    public int Radious
-    {
-      get
-      {
-        return b_Radious;
-      }
-      set
-      {
-        if (value.Equals(b_Radious))
-          return;
-        b_Radious = value;
-        RaisePropertyChanged("Radious");
-      }
-    }
+        public string BasketViewVisibility
+        {
+            get
+            {
+                return b_basketViewVisibility;
+            }
+            set
+            {
+                if (value.Equals(b_basketViewVisibility))
+                    return;
+                b_basketViewVisibility = value;
+                RaisePropertyChanged("BasketViewVisibility");
+            }
+        }
 
-    public ICommand ButtomClick { get; set; }
+        public IList<object> CirclesCollection
+        {
+            get
+            {
+                return b_CirclesCollection;
+            }
+            set
+            {
+                if (value.Equals(b_CirclesCollection))
+                    return;
+                RaisePropertyChanged("CirclesCollection");
+            }
+        }
 
-    private void ClickHandler()
-    {
+        public int Radious
+        {
+            get
+            {
+                return b_Radious;
+            }
+            set
+            {
+                if (value.Equals(b_Radious))
+                    return;
+                b_Radious = value;
+                RaisePropertyChanged("Radious");
+            }
+        }
+
+        public ICommand ButtomClick { get; set; }
+        public ICommand BasketButtonClick { get; set; }
+        public ICommand MainPageButtonClick { get; set; }
+        public object BasketView { get; set; }
+        public object MainView { get; set; }
+
+        private void ClickHandler()
+        {
             // do something usefull
             Radious *= 2;
             ColorString = "Magenta";
+        }
+
+        private void BasketButtonClickHandler()
+        {
+            BasketViewVisibility = "Visible";
+            MainViewVisibility = "Hidden";
+        }
+
+        private void MainPagetButtonClickHandler()
+        {
+            BasketViewVisibility = "Hidden";
+            MainViewVisibility = "Visible";
+        }
+
+        #endregion public API
+
+        #region private
+
+        private IList<object> b_CirclesCollection;
+        private int b_Radious;
+        private string b_colorString;
+        private string b_mainViewVisibility;
+        private string b_basketViewVisibility;
+        private ModelAbstractApi ModelLayer = ModelAbstractApi.CreateApi();
+
+        #endregion private
+
     }
-
-    #endregion public API
-
-    #region private
-
-    private IList<object> b_CirclesCollection;
-    private int b_Radious;
-    private string b_colorString;
-    private ModelAbstractApi ModelLayer = ModelAbstractApi.CreateApi();
-
-    #endregion private
-
-  }
 }
