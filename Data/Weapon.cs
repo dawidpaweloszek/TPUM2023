@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Data
 {
-    public class Vegetable
+    public abstract class Weapon
     {
         public string Name { get; }
         public float Price { get; set; }
@@ -14,7 +14,7 @@ namespace Data
         public CountryOfOrigin Origin { get; }
 
 
-        public Vegetable(string name, float price, CountryOfOrigin origin) 
+        public Weapon(string name, float price, CountryOfOrigin origin) 
         { 
             Name = name;
             Price = price;

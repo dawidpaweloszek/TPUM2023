@@ -41,8 +41,19 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="BattleAxe.cs" />
+    <Compile Include="BattleAxeType.cs" />
+    <Compile Include="Client.cs" />
     <Compile Include="CountryOfOrigin.cs" />
-    <Compile Include="Vegetable.cs" />
+    <Compile Include="DataLayer.cs" />
+    <Compile Include="IWarehouse.cs" />
+    <Compile Include="TwoHandedSword.cs" />
+    <Compile Include="TwoHandedSwordType.cs" />
+    <Compile Include="WarHammer.cs" />
+    <Compile Include="KatanaType.cs" />
+    <Compile Include="Katana.cs" />
+    <Compile Include="WarHammerType.cs" />
+    <Compile Include="Weapon.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Warehouse.cs" />
   </ItemGroup>

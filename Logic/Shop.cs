@@ -7,7 +7,7 @@ using Data;
 
 namespace Logic
 {
-    internal class Shop
+    public class Shop : IShop
     {
         private IWarehouse warehouse;
 
@@ -16,13 +16,9 @@ namespace Logic
             this.warehouse = warehouse;
         }
 
-        // smth to do within the scope of the shop
-        // so for the testing purpose i've used:
-        public void RemoveItems(List<Vegetable> vegetables) 
+        public bool Sell(List<Weapon> weapons)
         {
-            warehouse.RemoveVeggies(vegetables);
+            return false;
         }
     }
-
-
 }

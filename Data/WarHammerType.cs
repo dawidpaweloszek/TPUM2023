@@ -6,13 +6,11 @@ using System.Threading.Tasks;
 
 namespace Data
 {
-    public enum CountryOfOrigin
+    internal enum WarHammerType
     {
-        England,
-        Germany,
-        Japan,
-        Korea,
-        China,
-        Poland
+        Dwarven,
+        Skull_Breaker,
+        Longhammer,
+        Flesh_Pounder
     }
 }

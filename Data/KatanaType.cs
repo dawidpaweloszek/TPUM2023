@@ -6,13 +6,11 @@ using System.Threading.Tasks;
 
 namespace Data
 {
-    public enum CountryOfOrigin
+    internal enum KatanaType
     {
-        England,
-        Germany,
-        Japan,
-        Korea,
-        China,
-        Poland
+        Wakizashi,
+        Chisa,
+        Tachi,
+        Tanto
     }
 }

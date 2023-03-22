@@ -6,13 +6,11 @@ using System.Threading.Tasks;
 
 namespace Data
 {
-    public enum CountryOfOrigin
+    internal enum BattleAxeType
     {
-        England,
-        Germany,
-        Japan,
-        Korea,
-        China,
-        Poland
+        Double,
+        Dwarven,
+        Throwing,
+        Great
     }
 }

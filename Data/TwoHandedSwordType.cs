@@ -6,13 +6,11 @@ using System.Threading.Tasks;
 
 namespace Data
 {
-    public enum CountryOfOrigin
+    internal enum TwoHandedSwordType
     {
-        England,
-        Germany,
-        Japan,
-        Korea,
-        China,
-        Poland
+        Warbrand,
+        Longsword,
+        Greatsword,
+        Nodachi
     }
 }

@@ -1,33 +1,39 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.Remoting;
 using System.Text;
 using System.Threading.Tasks;
 
 namespace Data
 {
-    public class Warehouse
+    public class Warehouse : IWarehouse
     {
-        public List<Vegetable> Stock { get; set; }
+        public List<Weapon> Stock { get; private set; }
 
-        private Warehouse() 
-        {
-            Stock = new List<Vegetable>();
-        }
-
-        public static Warehouse CreateInstance() 
+        public Warehouse() 
         { 
-            return new Warehouse();
+            Stock = new List<Weapon>();
         }
 
-        public void RemoveVeggies(List<Vegetable> vegs) 
+        public void AddWeapons(List<Weapon> weapons)
         {
-            vegs.ForEach(v => Stock.Remove(v));
+            Stock.AddRange(weapons);
         }
-    }
+        
+        public void RemoveWeapons(List<Weapon> weapons)
+        {
+            weapons.ForEach(weapon => Stock.Remove(weapon));
+        }
 
-    public interface IWarehouse
-    {
-        void RemoveVeggies(List<Vegetable> vegs);
+        public List<Weapon> GetWeaponsOfType(string name)
+        {
+            return Stock.FindAll(weapon => weapon.Name == name);
+        }
+
+        public List<Weapon> GetWeaponsOfOrigin(CountryOfOrigin origin)
+        {
+            return Stock.FindAll(weapon => weapon.Origin == origin);
+        }
     }
 }
