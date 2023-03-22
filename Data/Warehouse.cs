@@ -9,31 +9,46 @@ namespace Data
 {
     public class Warehouse : IWarehouse
     {
-        public List<Weapon> Stock { get; private set; }
+        public List<IWeapon> Stock { get; }
 
         public Warehouse() 
         { 
-            Stock = new List<Weapon>();
+            Stock = new List<IWeapon>();
+
+            // TODO: @Ignacy - temporary we can add weapons here
         }
 
-        public void AddWeapons(List<Weapon> weapons)
+        public void AddWeapons(List<IWeapon> weapons)
         {
             Stock.AddRange(weapons);
         }
         
-        public void RemoveWeapons(List<Weapon> weapons)
+        public void RemoveWeapons(List<IWeapon> weapons)
         {
             weapons.ForEach(weapon => Stock.Remove(weapon));
         }
 
-        public List<Weapon> GetWeaponsOfType(string name)
+        public List<IWeapon> GetWeaponsOfType(string name)
         {
             return Stock.FindAll(weapon => weapon.Name == name);
         }
 
-        public List<Weapon> GetWeaponsOfOrigin(CountryOfOrigin origin)
+        public List<IWeapon> GetWeaponsOfOrigin(CountryOfOrigin origin)
         {
             return Stock.FindAll(weapon => weapon.Origin == origin);
+        }
+
+        public List<IWeapon> GetWeaponsByID(List<Guid> Ids)
+        {
+            List<IWeapon> weapons = new List<IWeapon>();
+            foreach (Guid guid in Ids) 
+            {
+                List<IWeapon> tmp = Stock.FindAll(x => x.Id == guid);
+                if (tmp.Count > 0)
+                    weapons.AddRange(tmp);
+            }
+
+            return weapons;
         }
     }
 }

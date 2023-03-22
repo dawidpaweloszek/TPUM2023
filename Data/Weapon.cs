@@ -6,20 +6,21 @@ using System.Threading.Tasks;
 
 namespace Data
 {
-    public abstract class Weapon
+    internal class Weapon : IWeapon
     {
-        public string Name { get; }
-        public float Price { get; set; }
-        public Guid Id { get; }
-        public CountryOfOrigin Origin { get; }
-
-
-        public Weapon(string name, float price, CountryOfOrigin origin) 
-        { 
+        public Weapon(string name, float price, CountryOfOrigin origin, WeaponType type)
+        {
             Name = name;
             Price = price;
             Origin = origin;
             Id = Guid.NewGuid();
+            Type = type;
         }
+
+        public string Name { get; }
+        public float Price { get; set; }
+        public Guid Id { get; }
+        public CountryOfOrigin Origin { get; }
+        public WeaponType Type { get; }
     }
 }

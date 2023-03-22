@@ -6,11 +6,11 @@ using System.Threading.Tasks;
 
 namespace Data
 {
-    internal enum KatanaType
+    public enum WeaponType
     {
-        Wakizashi,
-        Chisa,
-        Tachi,
-        Tanto
+        Katana,
+        WarHammer,
+        BattleAxe,
+        TwoHandedSword
     }
 }
