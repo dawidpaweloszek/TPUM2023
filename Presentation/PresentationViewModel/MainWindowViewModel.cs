@@ -27,19 +27,22 @@ namespace PresentationViewModel
             Radious = ModelLayer.Radius;
             ColorString = ModelLayer.ColorString;
             MainViewVisibility = ModelLayer.MainViewVisibility;
-            BasketViewVisibility = ModelLayer.BasketViewVisibility;
+            ShoppingCartViewVisibility = ModelLayer.ShoppingCartViewVisibility;
             weapons = new ObservableCollection<WeaponDTO>();
-            foreach (WeaponDTO weapon in ModelLayer.WarehousePresentation.Shop.GetWeapons())
+            foreach (WeaponDTO weapon in ModelLayer.WarehousePresentation.GetWeapons())
             {
-                weapons.Add(weapon);
+                Weapons.Add(weapon);
             }
+            shoppingCart = ModelLayer.ShoppingCart;
             ButtomClick = new GalaSoft.MvvmLight.Command.RelayCommand(() => ClickHandler());
-            BasketButtonClick = new GalaSoft.MvvmLight.Command.RelayCommand(() => BasketButtonClickHandler());
+            ShoppingCartButtonClick = new GalaSoft.MvvmLight.Command.RelayCommand(() => ShoppingCartButtonClickHandler());
             MainPageButtonClick = new GalaSoft.MvvmLight.Command.RelayCommand(() => MainPagetButtonClickHandler());
             AxesButtonClick = new GalaSoft.MvvmLight.Command.RelayCommand(() => AxesButtonClickHandler());
             HammersButtonClick = new GalaSoft.MvvmLight.Command.RelayCommand(() => HammersButtonClickHandler());
             KatanasButtonClick = new GalaSoft.MvvmLight.Command.RelayCommand(() => KatanasButtonClickHandler());
             SwordsButtonClick = new GalaSoft.MvvmLight.Command.RelayCommand(() => SwordsButtonClickHandler());
+
+            BuyButtonClick = new GalaSoft.MvvmLight.Command.RelayCommand(() => BuyButtonClickHandler());
 
             WeaponButtonClick = new RelayCommand<Guid>((id) => WeaponButtonClickHandler(id));
 
@@ -75,32 +78,48 @@ namespace PresentationViewModel
             }
         }
 
-        public string BasketViewVisibility
+        public string ShoppingCartViewVisibility
         {
             get
             {
-                return b_basketViewVisibility;
+                return b_shoppingCartViewVisibility;
             }
             set
             {
-                if (value.Equals(b_basketViewVisibility))
+                if (value.Equals(b_shoppingCartViewVisibility))
                     return;
-                b_basketViewVisibility = value;
-                RaisePropertyChanged("BasketViewVisibility");
+                b_shoppingCartViewVisibility = value;
+                RaisePropertyChanged("ShoppingCartViewVisibility");
             }
         }
-        public Basket Basket
+
+        public float ShoppingCartSum
         {
             get
             {
-                return basket;
+                return shoppingCartSum;
             }
             set
             {
-                if (value.Equals(basket))
+                if (value.Equals(shoppingCartSum))
                     return;
-                basket = value;
-                RaisePropertyChanged("Basket");
+                shoppingCartSum = value;
+                RaisePropertyChanged("ShoppingCartSum");
+            }
+        }
+
+        public ShoppingCart ShoppingCart
+        {
+            get
+            {
+                return shoppingCart;
+            }
+            set
+            {
+                if (value.Equals(shoppingCart))
+                    return;
+                shoppingCart = value;
+                RaisePropertyChanged("ShoppingCart");
             }
         }
         public IList<object> CirclesCollection
@@ -127,6 +146,7 @@ namespace PresentationViewModel
             {
                 if (value.Equals(weapons))
                     return;
+                weapons = value;
                 RaisePropertyChanged("Weapons");
             }
         }
@@ -147,7 +167,7 @@ namespace PresentationViewModel
         }
 
         public ICommand ButtomClick { get; set; }
-        public ICommand BasketButtonClick { get; set; }
+        public ICommand ShoppingCartButtonClick { get; set; }
         public ICommand MainPageButtonClick { get; set; }
         public ICommand AxesButtonClick { get; set; }
         public ICommand HammersButtonClick { get; set; }
@@ -155,73 +175,85 @@ namespace PresentationViewModel
         public ICommand SwordsButtonClick { get; set; }
 
         public ICommand WeaponButtonClick { get; set; }
+        public ICommand BuyButtonClick { get; set; }
 
         private void ClickHandler()
         {
             // do something usefull
             Radious *= 2;
             ColorString = "Magenta";
-            //this.Navigate(new Uri("BasketWindow.xaml", UriKind.Relative));
         }
-
-        private void BasketButtonClickHandler()
+        private void BuyButtonClickHandler()
         {
-            BasketViewVisibility = "Visible";
+            ShoppingCart.Buy();
+            ShoppingCartSum = ShoppingCart.Sum();
+            Weapons.Clear();
+            foreach (WeaponDTO weapon in ModelLayer.WarehousePresentation.GetWeapons())
+            {
+                Weapons.Add(weapon);
+            }
+        }
+        private void ShoppingCartButtonClickHandler()
+        {
+            ShoppingCartViewVisibility = "Visible";
             MainViewVisibility = "Hidden";
         }
 
         private void WeaponButtonClickHandler(Guid id)
         {
-            foreach (WeaponDTO weapon in ModelLayer.WarehousePresentation.Shop.GetWeapons())
+            foreach (WeaponDTO weapon in ModelLayer.WarehousePresentation.GetWeapons())
             {
                 if (weapon.Id.Equals(id))
-                    Basket.Add(weapon);
+                {
+                    ShoppingCart.Add(weapon);
+                    ShoppingCartSum = ShoppingCart.Sum();
+                }  
             }
         }
 
         private void AxesButtonClickHandler()
         {
-            weapons.Clear();
-            foreach (WeaponDTO weapon in ModelLayer.WarehousePresentation.Shop.GetWeapons())
+            Weapons.Clear();
+            foreach (WeaponDTO weapon in ModelLayer.WarehousePresentation.GetWeapons())
             {
                 if (weapon.Type.ToLower().Equals("BattleAxe"))
-                    weapons.Add(weapon);
+                    Weapons.Add(weapon);
             }
         }
 
         private void HammersButtonClickHandler()
         {
-            weapons.Clear();
-            foreach (WeaponDTO weapon in ModelLayer.WarehousePresentation.Shop.GetWeapons())
+            Weapons.Clear();
+            foreach (WeaponDTO weapon in ModelLayer.WarehousePresentation.GetWeapons())
             {
                 if (weapon.Type.ToLower().Equals("WarHammer"))
-                    weapons.Add(weapon);
+                    Weapons.Add(weapon);
             }
         }
 
         private void KatanasButtonClickHandler()
         {
-            weapons.Clear();
-            foreach (WeaponDTO weapon in ModelLayer.WarehousePresentation.Shop.GetWeapons())
+            Weapons.Clear();
+            foreach (WeaponDTO weapon in ModelLayer.WarehousePresentation.GetWeapons())
             {
                 if (weapon.Type.ToLower().Equals("Katana"))
-                    weapons.Add(weapon);
+                    Weapons.Add(weapon);
             }
         }
 
         private void SwordsButtonClickHandler()
         {
-            weapons.Clear();
-            foreach (WeaponDTO weapon in ModelLayer.WarehousePresentation.Shop.GetWeapons())
+            Weapons.Clear();
+            foreach (WeaponDTO weapon in ModelLayer.WarehousePresentation.GetWeapons())
             {
                 if (weapon.Type.ToLower().Equals("TwoHandedSword"))
-                    weapons.Add(weapon);
+                    Weapons.Add(weapon);
             }
         }
 
         private void MainPagetButtonClickHandler()
         {
-            BasketViewVisibility = "Hidden";
+            ShoppingCartViewVisibility = "Hidden";
             MainViewVisibility = "Visible";
         }
 
@@ -230,13 +262,14 @@ namespace PresentationViewModel
         #region private
 
         private IList<object> b_CirclesCollection;
-        private Basket basket;
+        private ShoppingCart shoppingCart;
+        private float shoppingCartSum;
         private ObservableCollection<WeaponDTO> weapons;
         private int b_Radious;
         private string b_colorString;
         private string b_mainViewVisibility;
-        private string b_basketViewVisibility;
-        private ModelAbstractApi ModelLayer = ModelAbstractApi.CreateApi();
+        private string b_shoppingCartViewVisibility;
+        private ModelAbstractApi ModelLayer;
 
         #endregion private
 

@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:vm="clr-namespace:PresentationViewModel;assembly=PresentationViewModel"
         mc:Ignorable="d"
-        Title="Presentation layer targeting reactive/interactive behaviour" Height="auto" Width="auto">
+        Title="Sklep z bronią białą" Height="auto" Width="auto">
     <Window.DataContext>
         <vm:MainWindowViewModel />
     </Window.DataContext>
@@ -17,12 +17,12 @@
                     <Button Content="Młoty" MinHeight="100" MinWidth="150" Margin="5 0" Command= "{Binding HammersButtonClick}"/>
                     <Button Content="Katany" MinHeight="100" MinWidth="150" Margin="5 0" Command= "{Binding KatanasButtonClick}"/>
                     <Button Content="Miecze" MinHeight="100" MinWidth="150" Margin="5 0" Command= "{Binding SwordsButtonClick}"/>
-                    <Button Content="Koszyk" MinHeight="100" MinWidth="150" Margin="50 0" Command= "{Binding BasketButtonClick}"/>
+                    <Button Content="Koszyk" MinHeight="100" MinWidth="150" Margin="50 0" Command= "{Binding ShoppingCartButtonClick}"/>
                 </StackPanel>
 
                 <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
                     <TextBlock x:Name="PromotionLink" FontSize="28">
-                    <Hyperlink>!!! SKUP TOPORÓW !!!</Hyperlink>
+                    <!--Hyperlink>!!! SKUP TOPORÓW !!!</Hyperlink-->
                     </TextBlock>
                 </StackPanel>
 
@@ -31,7 +31,7 @@
                         <ItemsControl ItemsSource="{Binding Weapons}">
                             <ItemsControl.ItemTemplate>
                                 <DataTemplate>
-                                    <Button Width="800" Height="100" Margin="40 10" Command="{Binding Path=DataContext.WeaponButtonClick, RelativeSource={RelativeSource AncestorType=ItemsControl}, Mode=Default}" CommandParameter="{Binding ID}">
+                                    <Button Width="800" Height="100" Margin="40 10" Command="{Binding Path=DataContext.WeaponButtonClick, RelativeSource={RelativeSource AncestorType=ItemsControl}, Mode=Default}" CommandParameter="{Binding Id}">
                                         <StackPanel Orientation="Horizontal" HorizontalAlignment="Left">
                                             <Image Source="fantasyToporek.png" Margin="50 0"></Image>
                                             <TextBlock VerticalAlignment="Center" FontSize="25" Margin="50 0" Text="{Binding Name}"></TextBlock>
@@ -46,7 +46,7 @@
             </StackPanel>
         </Canvas>
 
-        <Canvas Width="900" Height="600" x:Name="BasketView" Visibility="{Binding BasketViewVisibility}">
+        <Canvas Width="900" Height="600" x:Name="ShoppingCartView" Visibility="{Binding ShoppingCartViewVisibility}">
             <StackPanel Orientation="Vertical">
                 <StackPanel Orientation="Horizontal" Width="900" Height="100">
                     <Button Content="Strona główna" MinHeight="100" MinWidth="150" Margin="5 0" Command= "{Binding MainPageButtonClick}"/>
@@ -54,12 +54,12 @@
 
                 <StackPanel Orientation="Horizontal">
                     <ScrollViewer VerticalScrollBarVisibility="Visible" Height="300">
-                        <ItemsControl ItemsSource="{Binding Basket.Weapons}">
+                        <ItemsControl ItemsSource="{Binding ShoppingCart.Weapons}">
                             <ItemsControl.ItemTemplate>
                                 <DataTemplate>
                                     <Button Width="800" Height="100" Margin="40 10">
                                         <StackPanel Orientation="Horizontal" HorizontalAlignment="Left">
-                                            <Image Source="apple.png" Margin="50 0"></Image>
+                                            <Image Source="fantasyToporek.png" Margin="50 0"></Image>
                                             <TextBlock VerticalAlignment="Center" FontSize="25" Margin="50 0" Text="{Binding Name}"></TextBlock>
                                             <TextBlock VerticalAlignment="Center" FontSize="25" Margin="50 0" Text="{Binding Price, StringFormat='0. PLN'}"></TextBlock>
                                         </StackPanel>
@@ -71,7 +71,7 @@
                 </StackPanel>
                 <StackPanel Orientation="Horizontal">
                     <Button Content="Kup" Width="300" Height="200" FontSize="36" Margin="30" Command= "{Binding BuyButtonClick}"></Button>
-                    <TextBlock VerticalAlignment="Center" FontSize="48" Margin="100 0">Kwota</TextBlock>
+                    <TextBlock VerticalAlignment="Center" FontSize="48" Margin="100 0" Text="{Binding ShoppingCartSum, StringFormat='0. PLN'}"></TextBlock>
                 </StackPanel>
 
             </StackPanel>
