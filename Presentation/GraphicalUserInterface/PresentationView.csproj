@@ -11,7 +11,21 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="fantasyToporek.png" />
+    <None Remove="fantasyMlotek.png" />
+    <None Remove="japonskiNozyk.png" />
+    <None Remove="celtyckiNozyk.png" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\PresentationViewModel\PresentationViewModel.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Resource Include="fantasyToporek.png" />
+    <Resource Include="fantasyMlotek.png" />
+    <Resource Include="japonskiNozyk.png" />
+    <Resource Include="celtyckiNozyk.png" />
+  </ItemGroup>
+  
 </Project>

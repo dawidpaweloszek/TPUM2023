@@ -5,6 +5,8 @@ using System.Collections.Generic;
 using System.Windows.Input;
 using PresentationModel;
 using PresentationViewModel.MVVMLight;
+using System.Collections.ObjectModel;
+using Logic;
 
 namespace PresentationViewModel
 {
@@ -24,9 +26,15 @@ namespace PresentationViewModel
             ColorString = ModelLayer.ColorString;
             MainViewVisibility = ModelLayer.MainViewVisibility;
             BasketViewVisibility = ModelLayer.BasketViewVisibility;
+            weapons = new ObservableCollection<WeaponDTO>();
+            foreach (WeaponDTO weapon in ModelLayer.WarehousePresentation.Shop.GetWeapons())
+            {
+                weapons.Add(weapon);
+            }
             ButtomClick = new RelayCommand(() => ClickHandler());
             BasketButtonClick = new RelayCommand(() => BasketButtonClickHandler());
             MainPageButtonClick = new RelayCommand(() => MainPagetButtonClickHandler());
+
         }
 
         public string ColorString
@@ -88,6 +96,20 @@ namespace PresentationViewModel
             }
         }
 
+        public ObservableCollection<WeaponDTO> Weapons
+        {
+            get
+            {
+                return weapons;
+            }
+            set
+            {
+                if (value.Equals(weapons))
+                    return;
+                RaisePropertyChanged("Weapons");
+            }
+        }
+
         public int Radious
         {
             get
@@ -106,14 +128,13 @@ namespace PresentationViewModel
         public ICommand ButtomClick { get; set; }
         public ICommand BasketButtonClick { get; set; }
         public ICommand MainPageButtonClick { get; set; }
-        public object BasketView { get; set; }
-        public object MainView { get; set; }
 
         private void ClickHandler()
         {
             // do something usefull
             Radious *= 2;
             ColorString = "Magenta";
+            //this.Navigate(new Uri("BasketWindow.xaml", UriKind.Relative));
         }
 
         private void BasketButtonClickHandler()
@@ -133,6 +154,7 @@ namespace PresentationViewModel
         #region private
 
         private IList<object> b_CirclesCollection;
+        private ObservableCollection<WeaponDTO> weapons;
         private int b_Radious;
         private string b_colorString;
         private string b_mainViewVisibility;
