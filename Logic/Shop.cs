@@ -10,27 +10,37 @@ namespace Logic
     public class Shop : IShop
     {
         private IWarehouse warehouse;
-        private IShoppingCart cart;
+        private ISpecialOffer specialOffer;
 
         public Shop(IWarehouse warehouse)
         {
             this.warehouse = warehouse;
-            cart = new ShoppingCart();
+            specialOffer = new SpecialOffer(warehouse);
         }
 
-        public List<WeaponDTO> GetWeapons()
+        public List<WeaponDTO> GetWeapons(bool onSale = true)
         {
+            Tuple<Guid, float> sale = new Tuple<Guid, float>(Guid.Empty, 1f);
+            if (onSale)
+                sale = specialOffer.GetSpecialOffer();
+                
             List<WeaponDTO> availableWeapons = new List<WeaponDTO>();
 
             foreach (IWeapon weapon in warehouse.Stock)
+            {
+                float price = weapon.Price;
+                if (weapon.Id.Equals(sale.Item1))
+                    price *= sale.Item2;
+
                 availableWeapons.Add(new WeaponDTO
                 {
                     Name = weapon.Name,
-                    Price = weapon.Price,
+                    Price = price,
                     Id = weapon.Id,
                     Type = weapon.Type.ToString(),
                     Origin = weapon.Origin.ToString()
                 });
+            }
 
             return availableWeapons;
         }

@@ -32,9 +32,9 @@ namespace Data
             weapons.ForEach(weapon => Stock.Remove(weapon));
         }
 
-        public List<IWeapon> GetWeaponsOfType(string name)
+        public List<IWeapon> GetWeaponsOfType(WeaponType type)
         {
-            return Stock.FindAll(weapon => weapon.Name == name);
+            return Stock.FindAll(weapon => weapon.Type == type);
         }
 
         public List<IWeapon> GetWeaponsOfOrigin(CountryOfOrigin origin)

@@ -8,7 +8,7 @@ namespace Data
         List<IWeapon> Stock { get; }
         void AddWeapons(List<IWeapon> weapons);
         void RemoveWeapons(List<IWeapon> weapons);
-        List<IWeapon> GetWeaponsOfType(string name);
+        List<IWeapon> GetWeaponsOfType(WeaponType type);
         List<IWeapon> GetWeaponsOfOrigin(CountryOfOrigin origin);
         List<IWeapon> GetWeaponsByID(List<Guid> Ids);
     }

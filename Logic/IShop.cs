@@ -9,7 +9,7 @@ namespace Logic
 {
     public interface IShop
     {
-        List<WeaponDTO> GetWeapons();
+        List<WeaponDTO> GetWeapons(bool onSale = true);
         bool Sell(List<WeaponDTO> weapons);
     }
 }

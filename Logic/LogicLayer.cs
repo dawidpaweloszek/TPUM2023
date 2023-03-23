@@ -16,7 +16,7 @@ namespace Logic
             return new LogicLayer(DataLayer.Create());
         }
 
-        private LogicLayer(DataLayer data)
+        public LogicLayer(DataLayer data)
         {
             Shop = new Shop(data.Warehouse);
         }

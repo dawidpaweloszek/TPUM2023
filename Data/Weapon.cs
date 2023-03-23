@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Data
 {
-    internal class Weapon : IWeapon
+    public class Weapon : IWeapon
     {
         public Weapon(string name, float price, CountryOfOrigin origin, WeaponType type)
         {

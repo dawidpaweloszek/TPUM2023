@@ -15,7 +15,7 @@ namespace Data
             return new DataLayer();
         }
 
-        private DataLayer() 
+        public DataLayer() 
         {
             Warehouse = new Warehouse();
         }
