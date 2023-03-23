@@ -31,7 +31,7 @@
                         <ItemsControl ItemsSource="{Binding Weapons}">
                             <ItemsControl.ItemTemplate>
                                 <DataTemplate>
-                                    <Button Width="800" Height="100" Margin="40 10">
+                                    <Button Width="800" Height="100" Margin="40 10" Command="{Binding Path=DataContext.WeaponButtonClick, RelativeSource={RelativeSource AncestorType=ItemsControl}, Mode=Default}" CommandParameter="{Binding ID}">
                                         <StackPanel Orientation="Horizontal" HorizontalAlignment="Left">
                                             <Image Source="fantasyToporek.png" Margin="50 0"></Image>
                                             <TextBlock VerticalAlignment="Center" FontSize="25" Margin="50 0" Text="{Binding Name}"></TextBlock>
@@ -54,35 +54,18 @@
 
                 <StackPanel Orientation="Horizontal">
                     <ScrollViewer VerticalScrollBarVisibility="Visible" Height="300">
-                        <ItemsControl>
-                            <Button Width="800" Height="100" Margin="40 10">
-                                <StackPanel Orientation="Horizontal" HorizontalAlignment="Left">
-                                    <Image Source="fantasyToporek.png" Margin="50 0"></Image>
-                                    <TextBlock VerticalAlignment="Center" FontSize="25" Margin="50 0">Topór</TextBlock>
-                                    <TextBlock VerticalAlignment="Center" FontSize="25" Margin="50 0">2137 zł</TextBlock>
-                                </StackPanel>
-                            </Button>
-                            <Button Width="800" Height="100" Margin="40 10">
-                                <StackPanel Orientation="Horizontal" HorizontalAlignment="Left">
-                                    <Image Source="fantasyMlotek.png" Margin="50 0"></Image>
-                                    <TextBlock VerticalAlignment="Center" FontSize="25" Margin="50 0">Młot</TextBlock>
-                                    <TextBlock VerticalAlignment="Center" FontSize="25" Margin="50 0">696 zł</TextBlock>
-                                </StackPanel>
-                            </Button>
-                            <Button Width="800" Height="100" Margin="40 10">
-                                <StackPanel Orientation="Horizontal" HorizontalAlignment="Left">
-                                    <Image Source="japonskiNozyk.png" Margin="50 0"></Image>
-                                    <TextBlock VerticalAlignment="Center" FontSize="25" Margin="50 0">Katana</TextBlock>
-                                    <TextBlock VerticalAlignment="Center" FontSize="25" Margin="50 0">420 zł</TextBlock>
-                                </StackPanel>
-                            </Button>
-                            <Button Width="800" Height="100" Margin="40 10">
-                                <StackPanel Orientation="Horizontal" HorizontalAlignment="Left">
-                                    <Image Source="celtyckiNozyk.png" Margin="50 0"></Image>
-                                    <TextBlock VerticalAlignment="Center" FontSize="25" Margin="50 0">Miecz</TextBlock>
-                                    <TextBlock VerticalAlignment="Center" FontSize="25" Margin="50 0">199 zł</TextBlock>
-                                </StackPanel>
-                            </Button>
+                        <ItemsControl ItemsSource="{Binding Basket.Weapons}">
+                            <ItemsControl.ItemTemplate>
+                                <DataTemplate>
+                                    <Button Width="800" Height="100" Margin="40 10">
+                                        <StackPanel Orientation="Horizontal" HorizontalAlignment="Left">
+                                            <Image Source="apple.png" Margin="50 0"></Image>
+                                            <TextBlock VerticalAlignment="Center" FontSize="25" Margin="50 0" Text="{Binding Name}"></TextBlock>
+                                            <TextBlock VerticalAlignment="Center" FontSize="25" Margin="50 0" Text="{Binding Price, StringFormat='0. PLN'}"></TextBlock>
+                                        </StackPanel>
+                                    </Button>
+                                </DataTemplate>
+                            </ItemsControl.ItemTemplate>
                         </ItemsControl>
                     </ScrollViewer>
                 </StackPanel>

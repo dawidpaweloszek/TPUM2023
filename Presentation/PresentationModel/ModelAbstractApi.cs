@@ -1,4 +1,5 @@
 ﻿using Logic;
+using System.Collections.Generic;
 
 namespace PresentationModel
 {
@@ -9,6 +10,7 @@ namespace PresentationModel
         public abstract string MainViewVisibility { get; }
         public abstract string BasketViewVisibility { get; }
         public abstract WarehousePresentation WarehousePresentation { get; }
+        public abstract Basket Basket { get; }
         public abstract LogicLayer LogicLayer { get; }
 
         public static ModelAbstractApi CreateApi()
@@ -26,6 +28,8 @@ namespace PresentationModel
         public override string MainViewVisibility => "Visiblie";
 
         public override string BasketViewVisibility => "Hidden";
+
+        public override Basket Basket => new Basket(new List<WeaponDTO>());
 
         public override WarehousePresentation WarehousePresentation => new WarehousePresentation(LogicLayer.Shop);
 

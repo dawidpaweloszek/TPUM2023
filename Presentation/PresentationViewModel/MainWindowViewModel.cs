@@ -7,6 +7,8 @@ using PresentationModel;
 using PresentationViewModel.MVVMLight;
 using System.Collections.ObjectModel;
 using Logic;
+using Microsoft.Toolkit.Mvvm;
+using GalaSoft.MvvmLight.Command;
 
 namespace PresentationViewModel
 {
@@ -31,9 +33,15 @@ namespace PresentationViewModel
             {
                 weapons.Add(weapon);
             }
-            ButtomClick = new RelayCommand(() => ClickHandler());
-            BasketButtonClick = new RelayCommand(() => BasketButtonClickHandler());
-            MainPageButtonClick = new RelayCommand(() => MainPagetButtonClickHandler());
+            ButtomClick = new GalaSoft.MvvmLight.Command.RelayCommand(() => ClickHandler());
+            BasketButtonClick = new GalaSoft.MvvmLight.Command.RelayCommand(() => BasketButtonClickHandler());
+            MainPageButtonClick = new GalaSoft.MvvmLight.Command.RelayCommand(() => MainPagetButtonClickHandler());
+            AxesButtonClick = new GalaSoft.MvvmLight.Command.RelayCommand(() => AxesButtonClickHandler());
+            HammersButtonClick = new GalaSoft.MvvmLight.Command.RelayCommand(() => HammersButtonClickHandler());
+            KatanasButtonClick = new GalaSoft.MvvmLight.Command.RelayCommand(() => KatanasButtonClickHandler());
+            SwordsButtonClick = new GalaSoft.MvvmLight.Command.RelayCommand(() => SwordsButtonClickHandler());
+
+            WeaponButtonClick = new RelayCommand<Guid>((id) => WeaponButtonClickHandler(id));
 
         }
 
@@ -81,7 +89,20 @@ namespace PresentationViewModel
                 RaisePropertyChanged("BasketViewVisibility");
             }
         }
-
+        public Basket Basket
+        {
+            get
+            {
+                return basket;
+            }
+            set
+            {
+                if (value.Equals(basket))
+                    return;
+                basket = value;
+                RaisePropertyChanged("Basket");
+            }
+        }
         public IList<object> CirclesCollection
         {
             get
@@ -128,6 +149,12 @@ namespace PresentationViewModel
         public ICommand ButtomClick { get; set; }
         public ICommand BasketButtonClick { get; set; }
         public ICommand MainPageButtonClick { get; set; }
+        public ICommand AxesButtonClick { get; set; }
+        public ICommand HammersButtonClick { get; set; }
+        public ICommand KatanasButtonClick { get; set; }
+        public ICommand SwordsButtonClick { get; set; }
+
+        public ICommand WeaponButtonClick { get; set; }
 
         private void ClickHandler()
         {
@@ -143,6 +170,55 @@ namespace PresentationViewModel
             MainViewVisibility = "Hidden";
         }
 
+        private void WeaponButtonClickHandler(Guid id)
+        {
+            foreach (WeaponDTO weapon in ModelLayer.WarehousePresentation.Shop.GetWeapons())
+            {
+                if (weapon.Id.Equals(id))
+                    Basket.Add(weapon);
+            }
+        }
+
+        private void AxesButtonClickHandler()
+        {
+            weapons.Clear();
+            foreach (WeaponDTO weapon in ModelLayer.WarehousePresentation.Shop.GetWeapons())
+            {
+                if (weapon.Type.ToLower().Equals("BattleAxe"))
+                    weapons.Add(weapon);
+            }
+        }
+
+        private void HammersButtonClickHandler()
+        {
+            weapons.Clear();
+            foreach (WeaponDTO weapon in ModelLayer.WarehousePresentation.Shop.GetWeapons())
+            {
+                if (weapon.Type.ToLower().Equals("WarHammer"))
+                    weapons.Add(weapon);
+            }
+        }
+
+        private void KatanasButtonClickHandler()
+        {
+            weapons.Clear();
+            foreach (WeaponDTO weapon in ModelLayer.WarehousePresentation.Shop.GetWeapons())
+            {
+                if (weapon.Type.ToLower().Equals("Katana"))
+                    weapons.Add(weapon);
+            }
+        }
+
+        private void SwordsButtonClickHandler()
+        {
+            weapons.Clear();
+            foreach (WeaponDTO weapon in ModelLayer.WarehousePresentation.Shop.GetWeapons())
+            {
+                if (weapon.Type.ToLower().Equals("TwoHandedSword"))
+                    weapons.Add(weapon);
+            }
+        }
+
         private void MainPagetButtonClickHandler()
         {
             BasketViewVisibility = "Hidden";
@@ -154,6 +230,7 @@ namespace PresentationViewModel
         #region private
 
         private IList<object> b_CirclesCollection;
+        private Basket basket;
         private ObservableCollection<WeaponDTO> weapons;
         private int b_Radious;
         private string b_colorString;
