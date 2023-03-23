@@ -1,5 +1,4 @@
 ﻿using Data;
-using System;
 using System.Timers;
 
 namespace Logic
@@ -7,7 +6,7 @@ namespace Logic
     internal class SpecialOffer : ISpecialOffer
     {
         private Guid WeaponOnSaleId { get; set; }
-        private Timer SaleTimer { get; }
+        private System.Timers.Timer SaleTimer { get; }
         private float Sale { get; set; }
         private IWarehouse Warehouse { get; set; }
         private Random Rand { get; set; }

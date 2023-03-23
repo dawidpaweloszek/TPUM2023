@@ -7,18 +7,15 @@ using System.Threading.Tasks;
 
 namespace Logic
 {
-    public class LogicLayer
+    public class LogicLayer : ILogicLayer
     {
         public IShop Shop { get; private set; }
+        private IDataLayer Data { get; }
 
-        public static LogicLayer Create()
+        public LogicLayer(IDataLayer data)
         {
-            return new LogicLayer(DataLayer.Create());
-        }
-
-        public LogicLayer(DataLayer data)
-        {
-            Shop = new Shop(data.Warehouse);
+            Data = data;
+            Shop = new Shop(Data.Warehouse);
         }
     }
 }

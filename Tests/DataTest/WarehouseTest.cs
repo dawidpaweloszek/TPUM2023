@@ -10,7 +10,7 @@ namespace DataTest
         [TestInitialize]
         public void InitTest()
         {
-            warehouse = DataLayer.Create().Warehouse;
+            warehouse = IDataLayer.Create().Warehouse;
             Assert.IsNotNull(warehouse);
 
             warehouse.Stock.Clear();

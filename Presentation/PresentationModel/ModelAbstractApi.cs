@@ -13,17 +13,17 @@ namespace PresentationModel
         public abstract WarehousePresentation WarehousePresentation { get; }
         public abstract ShoppingCart ShoppingCart { get; }
 
-        public static ModelAbstractApi CreateApi()
+        public static ModelAbstractApi CreateApi(ILogicLayer logicLayer = default(ILogicLayer))
         {
-            return new ModelApi();
+            return new ModelApi(logicLayer ?? ILogicLayer.Create());
         }
     }
 
     internal class ModelApi : ModelAbstractApi
     {
-        public ModelApi() : this(LogicLayer.Create())
+        public ModelApi(ILogicLayer logicLayer)
         {
-
+            this.logicLayer = logicLayer;
         }
 
         public ModelApi(LogicLayer logicLayer)
@@ -42,6 +42,6 @@ namespace PresentationModel
 
         public override WarehousePresentation WarehousePresentation => new WarehousePresentation(logicLayer.Shop);
 
-        private LogicLayer logicLayer;
+        private ILogicLayer logicLayer;
     }
 }

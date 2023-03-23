@@ -7,29 +7,14 @@ namespace LogicTest
     [TestClass]
     public class ShopTest
     {
-        private DataLayer dataLayer;
+        private IDataLayer dataLayer;
         private IShop shop;
 
         [TestInitialize]
         public void InitTest()
         {
-            dataLayer = DataLayer.Create();
+            dataLayer = new DataLayerTest();
             Assert.IsNotNull(dataLayer);
-
-            dataLayer.Warehouse.Stock.Clear();
-            Assert.AreEqual(0, dataLayer.Warehouse.Stock.Count);
-
-            List<IWeapon> weapons = new List<IWeapon>
-            {
-                new Weapon("test0", 00.1f, CountryOfOrigin.England, WeaponType.Katana),
-                new Weapon("test1", 10.2f, CountryOfOrigin.China, WeaponType.BattleAxe),
-                new Weapon("test2", 20.3f, CountryOfOrigin.Korea, WeaponType.WarHammer),
-                new Weapon("test3", 30.4f, CountryOfOrigin.Japan, WeaponType.TwoHandedSword),
-                new Weapon("test4", 40.5f, CountryOfOrigin.Germany, WeaponType.BattleAxe)
-            };
-
-            dataLayer.Warehouse.AddWeapons(weapons);
-            Assert.AreEqual(5, dataLayer.Warehouse.Stock.Count);
 
             shop = new LogicLayer(dataLayer).Shop;
             Assert.IsNotNull(shop);
