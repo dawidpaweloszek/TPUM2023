@@ -14,10 +14,10 @@ namespace PresentationModel
             Shop = shop;
             Shop.PriceChanged += OnPriceChanged;
         }
-        private void OnPriceChanged(object sender, PriceChangeEventArgs e)
+        private void OnPriceChanged(object sender, Logic.PriceChangeEventArgs e)
         {
-            EventHandler<PriceChangeEventArgs> handler = PriceChanged;
-            handler?.Invoke(this, e);
+            EventHandler<PresentationModel.PriceChangeEventArgs> handler = PriceChanged;
+            handler?.Invoke(this, new PresentationModel.PriceChangeEventArgs(e.Id, e.Price));
         }
 
         public List<WeaponPresentation> GetWeapons()
@@ -30,6 +30,6 @@ namespace PresentationModel
             return weapons;
         }
 
-        public event EventHandler<PriceChangeEventArgs> PriceChanged;
+        public event EventHandler<PresentationModel.PriceChangeEventArgs> PriceChanged;
     }
 }

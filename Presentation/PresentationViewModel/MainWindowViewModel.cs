@@ -50,7 +50,7 @@ namespace PresentationViewModel
             WeaponButtonClick = new RelayCommand<Guid>((id) => WeaponButtonClickHandler(id));
         }
 
-        private void OnPriceChanged(object sender, PriceChangeEventArgs e)
+        private void OnPriceChanged(object sender, PresentationModel.PriceChangeEventArgs e)
         {
             ObservableCollection<WeaponPresentation> newWeapons = Weapons;
             WeaponPresentation weapon = newWeapons.FirstOrDefault(x => x.Id == e.Id);

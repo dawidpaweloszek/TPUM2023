@@ -12,7 +12,7 @@ namespace PresentationModel
 {
     public class WeaponPresentation : INotifyPropertyChanged
     {
-        public WeaponPresentation(string name, float price, Guid id, CountryOfOrigin origin, WeaponType weaponType)
+        public WeaponPresentation(string name, float price, Guid id, string origin, string weaponType)
         {
             Name = name;
             Price = price;
@@ -24,8 +24,8 @@ namespace PresentationModel
         public string Name { get; set; }
         public float Price { get; set; }
         public Guid Id { get; set; }
-        public CountryOfOrigin Origin { get; set; }
-        public WeaponType Type{ get; set; }
+        public string Origin { get; set; }
+        public string Type{ get; set; }
 
         public event PropertyChangedEventHandler PropertyChanged;
 
