@@ -1,6 +1,7 @@
 ﻿using Logic;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Timers;
 
 namespace PresentationModel
 {
@@ -26,11 +27,6 @@ namespace PresentationModel
             this.logicLayer = logicLayer;
         }
 
-        public ModelApi(LogicLayer logicLayer)
-        {
-            this.logicLayer = logicLayer;
-        }
-
         public override int Radius => 100;
         public override string ColorString => "White";
 
@@ -38,7 +34,7 @@ namespace PresentationModel
 
         public override string ShoppingCartViewVisibility => "Hidden";
 
-        public override ShoppingCart ShoppingCart => new ShoppingCart(new ObservableCollection<WeaponDTO>(), logicLayer.Shop);
+        public override ShoppingCart ShoppingCart => new ShoppingCart(new ObservableCollection<WeaponPresentation>(), logicLayer.Shop);
 
         public override WarehousePresentation WarehousePresentation => new WarehousePresentation(logicLayer.Shop);
 

@@ -9,6 +9,8 @@ using System.Collections.ObjectModel;
 using Logic;
 using Microsoft.Toolkit.Mvvm;
 using GalaSoft.MvvmLight.Command;
+using System.Linq;
+using System.Threading;
 
 namespace PresentationViewModel
 {
@@ -28,11 +30,12 @@ namespace PresentationViewModel
             ColorString = ModelLayer.ColorString;
             MainViewVisibility = ModelLayer.MainViewVisibility;
             ShoppingCartViewVisibility = ModelLayer.ShoppingCartViewVisibility;
-            weapons = new ObservableCollection<WeaponDTO>();
-            foreach (WeaponDTO weapon in ModelLayer.WarehousePresentation.GetWeapons())
+            weapons = new ObservableCollection<WeaponPresentation>();
+            foreach (WeaponPresentation weapon in ModelLayer.WarehousePresentation.GetWeapons())
             {
                 Weapons.Add(weapon);
             }
+            ModelLayer.WarehousePresentation.PriceChanged += OnPriceChanged;
             shoppingCart = ModelLayer.ShoppingCart;
             ButtomClick = new GalaSoft.MvvmLight.Command.RelayCommand(() => ClickHandler());
             ShoppingCartButtonClick = new GalaSoft.MvvmLight.Command.RelayCommand(() => ShoppingCartButtonClickHandler());
@@ -45,7 +48,15 @@ namespace PresentationViewModel
             BuyButtonClick = new GalaSoft.MvvmLight.Command.RelayCommand(() => BuyButtonClickHandler());
 
             WeaponButtonClick = new RelayCommand<Guid>((id) => WeaponButtonClickHandler(id));
+        }
 
+        private void OnPriceChanged(object sender, PriceChangeEventArgs e)
+        {
+            ObservableCollection<WeaponPresentation> newWeapons = Weapons;
+            WeaponPresentation weapon = newWeapons.FirstOrDefault(x => x.Id == e.Id);
+            int weaponIndex = newWeapons.IndexOf(weapon);
+            newWeapons[weaponIndex].Price = e.Price;
+            Weapons = new ObservableCollection<WeaponPresentation>(newWeapons);
         }
 
         public string ColorString
@@ -136,7 +147,7 @@ namespace PresentationViewModel
             }
         }
 
-        public ObservableCollection<WeaponDTO> Weapons
+        public ObservableCollection<WeaponPresentation> Weapons
         {
             get
             {
@@ -188,7 +199,7 @@ namespace PresentationViewModel
             ShoppingCart.Buy();
             ShoppingCartSum = ShoppingCart.Sum();
             Weapons.Clear();
-            foreach (WeaponDTO weapon in ModelLayer.WarehousePresentation.GetWeapons())
+            foreach (WeaponPresentation weapon in ModelLayer.WarehousePresentation.GetWeapons())
             {
                 Weapons.Add(weapon);
             }
@@ -201,7 +212,7 @@ namespace PresentationViewModel
 
         private void WeaponButtonClickHandler(Guid id)
         {
-            foreach (WeaponDTO weapon in ModelLayer.WarehousePresentation.GetWeapons())
+            foreach (WeaponPresentation weapon in ModelLayer.WarehousePresentation.GetWeapons())
             {
                 if (weapon.Id.Equals(id))
                 {
@@ -214,9 +225,9 @@ namespace PresentationViewModel
         private void AxesButtonClickHandler()
         {
             Weapons.Clear();
-            foreach (WeaponDTO weapon in ModelLayer.WarehousePresentation.GetWeapons())
+            foreach (WeaponPresentation weapon in ModelLayer.WarehousePresentation.GetWeapons())
             {
-                if (weapon.Type.ToLower().Equals("BattleAxe"))
+                if (weapon.Type.Equals("BattleAxe"))
                     Weapons.Add(weapon);
             }
         }
@@ -224,9 +235,9 @@ namespace PresentationViewModel
         private void HammersButtonClickHandler()
         {
             Weapons.Clear();
-            foreach (WeaponDTO weapon in ModelLayer.WarehousePresentation.GetWeapons())
+            foreach (WeaponPresentation weapon in ModelLayer.WarehousePresentation.GetWeapons())
             {
-                if (weapon.Type.ToLower().Equals("WarHammer"))
+                if (weapon.Type.Equals("WarHammer"))
                     Weapons.Add(weapon);
             }
         }
@@ -234,9 +245,9 @@ namespace PresentationViewModel
         private void KatanasButtonClickHandler()
         {
             Weapons.Clear();
-            foreach (WeaponDTO weapon in ModelLayer.WarehousePresentation.GetWeapons())
+            foreach (WeaponPresentation weapon in ModelLayer.WarehousePresentation.GetWeapons())
             {
-                if (weapon.Type.ToLower().Equals("Katana"))
+                if (weapon.Type.Equals("Katana"))
                     Weapons.Add(weapon);
             }
         }
@@ -244,9 +255,9 @@ namespace PresentationViewModel
         private void SwordsButtonClickHandler()
         {
             Weapons.Clear();
-            foreach (WeaponDTO weapon in ModelLayer.WarehousePresentation.GetWeapons())
+            foreach (WeaponPresentation weapon in ModelLayer.WarehousePresentation.GetWeapons())
             {
-                if (weapon.Type.ToLower().Equals("TwoHandedSword"))
+                if (weapon.Type.Equals("TwoHandedSword"))
                     Weapons.Add(weapon);
             }
         }
@@ -264,7 +275,8 @@ namespace PresentationViewModel
         private IList<object> b_CirclesCollection;
         private ShoppingCart shoppingCart;
         private float shoppingCartSum;
-        private ObservableCollection<WeaponDTO> weapons;
+        private ObservableCollection<WeaponPresentation> weapons;
+        private Timer timer;
         private int b_Radious;
         private string b_colorString;
         private string b_mainViewVisibility;

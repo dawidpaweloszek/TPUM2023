@@ -10,16 +10,16 @@ namespace PresentationModel
 {
     public class ShoppingCart
     {
-        public ObservableCollection<WeaponDTO> Weapons { get; set; }
+        public ObservableCollection<WeaponPresentation> Weapons { get; set; }
         private IShop Shop { get; set; }
 
-        public ShoppingCart(ObservableCollection<WeaponDTO> weapons, IShop shop)
+        public ShoppingCart(ObservableCollection<WeaponPresentation> weapons, IShop shop)
         {
             Weapons = weapons;
             Shop = shop;
         }
 
-        public void Add(WeaponDTO weapon)
+        public void Add(WeaponPresentation weapon)
         {
             Weapons.Add(weapon);
         }
@@ -27,7 +27,7 @@ namespace PresentationModel
         public float Sum()
         {
             float res = 0f;
-            foreach (WeaponDTO weapon in Weapons)
+            foreach (WeaponPresentation weapon in Weapons)
             {
                 res += weapon.Price;
             }
@@ -37,9 +37,19 @@ namespace PresentationModel
 
         public bool Buy()
         {
-            bool res = Shop.Sell(Weapons.ToList());
+            List<WeaponDTO> shoppingList = new List<WeaponDTO>();
+
+
+            foreach (WeaponPresentation weaponPresentation in Weapons)
+            {
+                shoppingList.Add(Shop.GetWeapons().FirstOrDefault(x => x.Id == weaponPresentation.Id));
+            }
+
+            bool res = Shop.Sell(shoppingList);
             if (res)
+            {
                 Weapons.Clear();
+            }
 
             return res;
         }
