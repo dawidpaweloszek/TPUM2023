@@ -18,9 +18,19 @@ namespace Data
         }
 
         public string Name { get; }
-        public float Price { get; set; }
+        public float Price
+        {
+            get => price;
+            set
+            {
+                if (value == price)
+                    return;
+                price = value;
+            }
+        }
         public Guid Id { get; }
         public CountryOfOrigin Origin { get; }
         public WeaponType Type { get; }
+        private float price;
     }
 }

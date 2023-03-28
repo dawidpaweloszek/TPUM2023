@@ -5,11 +5,14 @@ namespace Data
 {
     public interface IWarehouse
     {
-        List<IWeapon> Stock { get; }
-        void AddWeapons(List<IWeapon> weapons);
-        void RemoveWeapons(List<IWeapon> weapons);
-        List<IWeapon> GetWeaponsOfType(WeaponType type);
-        List<IWeapon> GetWeaponsOfOrigin(CountryOfOrigin origin);
-        List<IWeapon> GetWeaponsByID(List<Guid> Ids);
+        public event EventHandler<PriceChangeEventArgs> PriceChange;
+
+        public List<IWeapon> Stock { get; }
+        public void AddWeapons(List<IWeapon> weapons);
+        public void RemoveWeapons(List<IWeapon> weapons);
+        public List<IWeapon> GetWeaponsOfType(WeaponType type);
+        public List<IWeapon> GetWeaponsOfOrigin(CountryOfOrigin origin);
+        public List<IWeapon> GetWeaponsByID(List<Guid> Ids);
+        public void ChangePrice(Guid id, float newPrice);
     }
 }

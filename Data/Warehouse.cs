@@ -9,6 +9,8 @@ namespace Data
 {
     public class Warehouse : IWarehouse
     {
+        public event EventHandler<PriceChangeEventArgs> PriceChange;
+
         public List<IWeapon> Stock { get; }
 
         public Warehouse() 
@@ -53,6 +55,26 @@ namespace Data
             }
 
             return weapons;
+        }
+
+        public void ChangePrice(Guid id, float newPrice)
+        {
+            IWeapon weapon = Stock.Find(x => x.Id.Equals(id));
+
+            if (weapon != null)
+                return;
+
+            if (Math.Abs(newPrice - weapon.Price) < 0.01f)
+                return;
+
+            weapon.Price = newPrice;
+            OnPriceChanged(weapon.Id, weapon.Price);
+        }
+
+        private void OnPriceChanged(Guid id, float price) 
+        {
+            EventHandler<PriceChangeEventArgs> handler = PriceChange;
+            handler?.Invoke(this, new PriceChangeEventArgs(id, price));
         }
     }
 }

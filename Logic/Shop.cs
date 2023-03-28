@@ -9,6 +9,8 @@ namespace Logic
 {
     public class Shop : IShop
     {
+        public event EventHandler<PriceChangeEventArgs> PriceChanged;
+
         private IWarehouse warehouse;
         private ISpecialOffer specialOffer;
 
@@ -16,6 +18,7 @@ namespace Logic
         {
             this.warehouse = warehouse;
             specialOffer = new SpecialOffer(warehouse);
+            warehouse.PriceChange += OnPriceChanged;
         }
 
         public List<WeaponDTO> GetWeapons(bool onSale = true)
@@ -57,6 +60,12 @@ namespace Logic
             warehouse.RemoveWeapons(weaponsDataLayer);
 
             return true;
+        }
+
+        private void OnPriceChanged(object sender, Data.PriceChangeEventArgs e) 
+        {
+            EventHandler<PriceChangeEventArgs> handler = PriceChanged;
+            handler?.Invoke(this, new Logic.PriceChangeEventArgs(e.Id, e.Price));
         }
     }
 }

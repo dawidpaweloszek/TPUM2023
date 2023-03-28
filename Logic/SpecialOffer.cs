@@ -1,4 +1,6 @@
 ﻿using Data;
+using System;
+using System.Linq;
 using System.Timers;
 
 namespace Logic
@@ -28,8 +30,10 @@ namespace Logic
 
         private void GetNewSale(Object source, ElapsedEventArgs e)
         {
-            Sale = ((float)Rand.NextDouble() / 4.0f) + 0.75f;
-            WeaponOnSaleId = Warehouse.Stock[Rand.Next(0, Warehouse.Stock.Count)].Id;
+            Sale = ((float)Rand.NextDouble() * 0.5f) + 0.7f;
+            IWeapon weapon = Warehouse.Stock[Rand.Next(0, Warehouse.Stock.Count)];
+            WeaponOnSaleId = weapon.Id;
+            Warehouse.ChangePrice(WeaponOnSaleId, weapon.Price * Sale);
         }
     }
 }
