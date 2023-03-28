@@ -9,9 +9,9 @@ namespace Data
     public interface IDataLayer
     {
         IWarehouse Warehouse { get; set; }
-        static IDataLayer Create()
+        static IDataLayer Create(IWarehouse warehouse = default)
         {
-            return new DataLayer();
+            return new DataLayer(warehouse);
         }
     }
 }

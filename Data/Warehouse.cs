@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Data
 {
-    public class Warehouse : IWarehouse
+    internal class Warehouse : IWarehouse
     {
         public event EventHandler<PriceChangeEventArgs> PriceChange;
 

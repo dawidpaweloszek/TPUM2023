@@ -16,9 +16,9 @@ namespace Data
             return new DataLayer();
         }
 
-        internal DataLayer() 
+        internal DataLayer(IWarehouse warehouse = default) 
         {
-            Warehouse = new Warehouse();
+            Warehouse = warehouse ?? new Warehouse();
         }
     }
 }
