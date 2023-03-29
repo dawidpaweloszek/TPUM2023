@@ -19,9 +19,9 @@ namespace Data
 
             // TODO: @Ignacy - temporary we can add weapons here
             Stock.Add(new Weapon("Toporek fantastyczny", 200f, CountryOfOrigin.China, WeaponType.BattleAxe));
-            Stock.Add(new Weapon("Młotek fantastyczny", 300.5f, CountryOfOrigin.Germany, WeaponType.WarHammer));
-            Stock.Add(new Weapon("Katana fajowska", 1000f, CountryOfOrigin.Japan, WeaponType.Katana));
-            Stock.Add(new Weapon("Miecz taki polski", 250f, CountryOfOrigin.Poland, WeaponType.TwoHandedSword));
+            Stock.Add(new Weapon("Młotek fantastyczny ", 300.5f, CountryOfOrigin.Germany, WeaponType.WarHammer));
+            Stock.Add(new Weapon("Katana fajowska     ", 1000f, CountryOfOrigin.Japan, WeaponType.Katana));
+            Stock.Add(new Weapon("Miecz taki polski      ", 250f, CountryOfOrigin.Poland, WeaponType.TwoHandedSword));
         }
 
         public void AddWeapons(List<IWeapon> weapons)

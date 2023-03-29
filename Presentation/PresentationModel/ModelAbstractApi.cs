@@ -28,7 +28,7 @@ namespace PresentationModel
         }
 
         public override int Radius => 100;
-        public override string ColorString => "White";
+        public override string ColorString => "Black";
 
         public override string MainViewVisibility => "Visiblie";
 
