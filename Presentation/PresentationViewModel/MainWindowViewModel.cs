@@ -6,11 +6,13 @@ using System.Windows.Input;
 using PresentationModel;
 using PresentationViewModel.MVVMLight;
 using System.Collections.ObjectModel;
-using Logic;
 using Microsoft.Toolkit.Mvvm;
 using GalaSoft.MvvmLight.Command;
+using System.Timers;
+using Logic;
+using Data;
 using System.Linq;
-using System.Threading;
+using System.Threading.Tasks;
 
 namespace PresentationViewModel
 {
@@ -48,6 +50,9 @@ namespace PresentationViewModel
             BuyButtonClick = new GalaSoft.MvvmLight.Command.RelayCommand(() => BuyButtonClickHandler());
 
             WeaponButtonClick = new RelayCommand<Guid>((id) => WeaponButtonClickHandler(id));
+
+            ConnectButtonClick = new GalaSoft.MvvmLight.Command.RelayCommand(() => ConnectButtonClickHandler());
+            ConnectionService = ServiceFactory.CreateConnectionService;
         }
 
         private void OnPriceChanged(object sender, PresentationModel.PriceChangeEventArgs e)
@@ -71,6 +76,21 @@ namespace PresentationViewModel
                     return;
                 b_colorString = value;
                 RaisePropertyChanged("ColorString");
+            }
+        }
+
+        public string ConnectButtonText
+        {
+            get
+            {
+                return b_connectButtonText;
+            }
+            set
+            {
+                if (value.Equals(b_connectButtonText))
+                    return;
+                b_connectButtonText = value;
+                RaisePropertyChanged("ConnectButtonText");
             }
         }
 
@@ -184,9 +204,9 @@ namespace PresentationViewModel
         public ICommand HammersButtonClick { get; set; }
         public ICommand KatanasButtonClick { get; set; }
         public ICommand SwordsButtonClick { get; set; }
-
         public ICommand WeaponButtonClick { get; set; }
         public ICommand BuyButtonClick { get; set; }
+        public ICommand ConnectButtonClick { get; set; }
 
         private void ClickHandler()
         {
@@ -194,6 +214,17 @@ namespace PresentationViewModel
             Radious *= 2;
             ColorString = "Magenta";
         }
+
+        private async Task ConnectButtonClickHandler()
+        {
+            ConnectButtonText = "łączenie";
+            bool result = await ConnectionService.Connect(new Uri("ws://localhost:8081"));
+            if (result)
+            {
+                ConnectButtonText = "połączono";
+            }
+        }
+
         private void BuyButtonClickHandler()
         {
             ShoppingCart.Buy();
@@ -282,6 +313,8 @@ namespace PresentationViewModel
         private string b_mainViewVisibility;
         private string b_shoppingCartViewVisibility;
         private ModelAbstractApi ModelLayer;
+        private IConnectionService ConnectionService;
+        private string b_connectButtonText;
 
         #endregion private
 

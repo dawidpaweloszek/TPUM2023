@@ -17,7 +17,7 @@ namespace PresentationServer
 
         static void ConnectionHandler(WebSocketConnection webSocketConnection)
         {
-
+            Console.WriteLine("[Server]: Client connected");
             webSocketConnection.OnMessage = ParseMessage;
             webSocketConnection.OnClose = () => { Console.WriteLine("[Server]: Connection closed"); };
             webSocketConnection.OnError = () => { Console.WriteLine("[Server]: Connection error encountered"); };

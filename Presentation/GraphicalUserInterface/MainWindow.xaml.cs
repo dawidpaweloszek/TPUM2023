@@ -14,7 +14,6 @@ namespace PresentationView
     public MainWindow()
     {
       InitializeComponent();
-      MainWindowViewModel _vm = (MainWindowViewModel)DataContext;
     }
   }
 }
