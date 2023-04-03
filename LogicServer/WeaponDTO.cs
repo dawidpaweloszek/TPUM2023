@@ -1,11 +1,11 @@
-﻿using Data;
+﻿using DataServer;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Logic
+namespace LogicServer
 {
     internal class WeaponDTO : IWeaponDTO
     {

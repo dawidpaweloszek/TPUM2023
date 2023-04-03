@@ -37,7 +37,7 @@ namespace PresentationModel
 
         public bool Buy()
         {
-            List<WeaponDTO> shoppingList = new List<WeaponDTO>();
+            List<IWeaponDTO> shoppingList = new List<IWeaponDTO>();
 
 
             foreach (WeaponPresentation weaponPresentation in Weapons)

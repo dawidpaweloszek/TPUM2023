@@ -1,13 +1,12 @@
-﻿using Data;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Logic
+namespace LogicServer
 {
-    internal class WeaponDTO : IWeaponDTO
+    public interface IWeaponDTO
     {
         public string Name { get; set; }
         public float Price { get; set; }

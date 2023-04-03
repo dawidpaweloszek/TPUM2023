@@ -3,9 +3,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.5.33424.131
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Logic", "Logic\Logic.csproj", "{F3F60A0F-A380-482F-9508-501B7BF3136D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Logic", "Logic\Logic.csproj", "{F3F60A0F-A380-482F-9508-501B7BF3136D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Data", "Data\Data.csproj", "{9878BDE7-FC71-4514-84BA-5AB495A34BAF}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Data", "Data\Data.csproj", "{9878BDE7-FC71-4514-84BA-5AB495A34BAF}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PresentationModel", "Presentation\PresentationModel\PresentationModel.csproj", "{59E21E24-309C-4717-972E-8A8C96681682}"
 EndProject
@@ -16,6 +16,12 @@ EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DataTest", "Tests\DataTest\DataTest.csproj", "{C735A3B8-EB31-429E-9151-54BEFAB93273}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LogicTest", "Tests\LogicTest\LogicTest.csproj", "{A9078BBC-4151-4A68-920B-1E9104E90496}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataServer", "DataServer\DataServer.csproj", "{EFA91253-5F1C-45A4-8AAF-4B55AF9B17DD}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LogicServer", "LogicServer\LogicServer.csproj", "{A018B603-AEEE-47F1-8EE3-D509BBA545FC}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PresentationServer", "PresentationServer\PresentationServer.csproj", "{43BF5BB4-7FFF-42EE-84DE-48E53A6DD2DE}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -51,6 +57,18 @@ Global
 		{A9078BBC-4151-4A68-920B-1E9104E90496}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{A9078BBC-4151-4A68-920B-1E9104E90496}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{A9078BBC-4151-4A68-920B-1E9104E90496}.Release|Any CPU.Build.0 = Release|Any CPU
+		{EFA91253-5F1C-45A4-8AAF-4B55AF9B17DD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EFA91253-5F1C-45A4-8AAF-4B55AF9B17DD}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EFA91253-5F1C-45A4-8AAF-4B55AF9B17DD}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EFA91253-5F1C-45A4-8AAF-4B55AF9B17DD}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A018B603-AEEE-47F1-8EE3-D509BBA545FC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A018B603-AEEE-47F1-8EE3-D509BBA545FC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A018B603-AEEE-47F1-8EE3-D509BBA545FC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A018B603-AEEE-47F1-8EE3-D509BBA545FC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{43BF5BB4-7FFF-42EE-84DE-48E53A6DD2DE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{43BF5BB4-7FFF-42EE-84DE-48E53A6DD2DE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{43BF5BB4-7FFF-42EE-84DE-48E53A6DD2DE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{43BF5BB4-7FFF-42EE-84DE-48E53A6DD2DE}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

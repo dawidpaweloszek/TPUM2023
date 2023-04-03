@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Data;
+using DataServer;
 
-namespace Logic
+namespace LogicServer
 {
     public class Shop : IShop
     {
@@ -62,10 +62,10 @@ namespace Logic
             return true;
         }
 
-        private void OnPriceChanged(object sender, Data.PriceChangeEventArgs e) 
+        private void OnPriceChanged(object sender, DataServer.PriceChangeEventArgs e) 
         {
             EventHandler<PriceChangeEventArgs> handler = PriceChanged;
-            handler?.Invoke(this, new Logic.PriceChangeEventArgs(e.Id, e.Price));
+            handler?.Invoke(this, new LogicServer.PriceChangeEventArgs(e.Id, e.Price));
         }
     }
 }

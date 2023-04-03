@@ -1,8 +1,8 @@
-﻿using Data;
+﻿using DataServer;
 using System;
 using System.Collections.Generic;
 
-namespace Logic
+namespace LogicServer
 {
     public interface IShop
     {
