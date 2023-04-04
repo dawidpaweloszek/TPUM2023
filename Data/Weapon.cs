@@ -3,11 +3,18 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Runtime.CompilerServices;
+using System.Text.Json.Serialization;
+
+[assembly: InternalsVisibleTo("DataTest")]
+[assembly: InternalsVisibleTo("LogicTest")]
+
 
 namespace Data
 {
-    public class Weapon : IWeapon
+    internal class Weapon : IWeapon
     {
+        [JsonConstructor]
         public Weapon(string name, float price, CountryOfOrigin origin, WeaponType type)
         {
             Name = name;

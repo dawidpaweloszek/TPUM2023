@@ -11,7 +11,7 @@ namespace Data
         #region public
 
         public static WebSocketConnection CurrentConnection { get; private set; }
-
+        public static Action OnConnected { get; set; }
         public static async Task<WebSocketConnection> Connect(Uri peer, Action<string> log)
         {
             ClientWebSocket m_ClientWebSocket = new ClientWebSocket();
@@ -22,6 +22,7 @@ namespace Data
                     //log($"Opening WebSocket connection to remote server {peer}");
                     WebSocketConnection socket = new ClintWebSocketConnection(m_ClientWebSocket, peer, log);
                     CurrentConnection = socket;
+                    OnConnected?.Invoke();
                     return socket;
 
                 default:

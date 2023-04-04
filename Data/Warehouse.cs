@@ -10,18 +10,23 @@ namespace Data
     internal class Warehouse : IWarehouse
     {
         public event EventHandler<PriceChangeEventArgs> PriceChange;
+        private bool waitingForStockUpdate;
 
-        public List<IWeapon> Stock { get; }
+        public List<IWeapon> Stock { get; private set; }
 
         public Warehouse() 
         { 
             Stock = new List<IWeapon>();
+
+            waitingForStockUpdate = false;
 
             // TODO: @Ignacy - temporary we can add weapons here
             Stock.Add(new Weapon("Toporek fantastyczny", 200f, CountryOfOrigin.China, WeaponType.BattleAxe));
             Stock.Add(new Weapon("Młotek fantastyczny ", 300.5f, CountryOfOrigin.Germany, WeaponType.WarHammer));
             Stock.Add(new Weapon("Katana fajowska     ", 1000f, CountryOfOrigin.Japan, WeaponType.Katana));
             Stock.Add(new Weapon("Miecz taki polski      ", 250f, CountryOfOrigin.Poland, WeaponType.TwoHandedSword));
+            WebSocketClient.OnConnected += Connected;
+
         }
 
         public void AddWeapons(List<IWeapon> weapons)
@@ -79,7 +84,28 @@ namespace Data
 
         public async Task SendAsync(string mesg)
         {
+            waitingForStockUpdate = true;
             await WebSocketClient.CurrentConnection.SendAsync(mesg);
+            while (waitingForStockUpdate) { }
+        }
+
+        public async Task RequestWeaponsUpdate()
+        {
+            await WebSocketClient.CurrentConnection.SendAsync("RequestAll");
+        }
+
+        private async void ParseMessage(string message)
+        {
+            if (message.Contains("UpdateAll"))
+            {
+                var json = message.Substring("UpdateAll".Length);
+                Stock = Serializer.JSONToWarehouse(json);
+            }
+        }
+        private async void Connected()
+        {
+            WebSocketClient.CurrentConnection.OnMessage = ParseMessage;
+            await RequestWeaponsUpdate();
         }
     }
 }

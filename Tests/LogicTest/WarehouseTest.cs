@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using Data;
 
 namespace LogicTest
@@ -66,6 +67,14 @@ namespace LogicTest
         {
             EventHandler<PriceChangeEventArgs> handler = PriceChange;
             handler?.Invoke(this, new PriceChangeEventArgs(id, price));
+        }
+        public Task RequestWeaponsUpdate()
+        {
+            throw new NotImplementedException();
+        }
+        public Task SendAsync(string message)
+        {
+            throw new NotImplementedException();
         }
     }
 }
