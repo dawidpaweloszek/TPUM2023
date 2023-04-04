@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 using Logic;
+using System.Threading.Tasks;
 
 namespace PresentationModel
 {
@@ -28,6 +29,11 @@ namespace PresentationModel
                 weapons.Add(new WeaponPresentation(weapon.Name, weapon.Price, weapon.Id, weapon.Origin, weapon.Type));
             }
             return weapons;
+        }
+
+        public async Task SendMessageAsync(string mesg)
+        {
+            Shop.SendMessageAsync(mesg);
         }
 
         public event EventHandler<PresentationModel.PriceChangeEventArgs> PriceChanged;

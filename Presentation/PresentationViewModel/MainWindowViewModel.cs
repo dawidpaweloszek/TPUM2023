@@ -41,7 +41,7 @@ namespace PresentationViewModel
             shoppingCart = ModelLayer.ShoppingCart;
             ButtomClick = new GalaSoft.MvvmLight.Command.RelayCommand(() => ClickHandler());
             ShoppingCartButtonClick = new GalaSoft.MvvmLight.Command.RelayCommand(() => ShoppingCartButtonClickHandler());
-            MainPageButtonClick = new GalaSoft.MvvmLight.Command.RelayCommand(() => MainPagetButtonClickHandler());
+            MainPageButtonClick = new GalaSoft.MvvmLight.Command.RelayCommand(() => MainPageButtonClickHandler());
             AxesButtonClick = new GalaSoft.MvvmLight.Command.RelayCommand(() => AxesButtonClickHandler());
             HammersButtonClick = new GalaSoft.MvvmLight.Command.RelayCommand(() => HammersButtonClickHandler());
             KatanasButtonClick = new GalaSoft.MvvmLight.Command.RelayCommand(() => KatanasButtonClickHandler());
@@ -239,6 +239,8 @@ namespace PresentationViewModel
         {
             ShoppingCartViewVisibility = "Visible";
             MainViewVisibility = "Hidden";
+
+            ModelLayer.WarehousePresentation.SendMessageAsync("Shopping cart button clicked");
         }
 
         private void WeaponButtonClickHandler(Guid id)
@@ -293,10 +295,12 @@ namespace PresentationViewModel
             }
         }
 
-        private void MainPagetButtonClickHandler()
+        private void MainPageButtonClickHandler()
         {
             ShoppingCartViewVisibility = "Hidden";
             MainViewVisibility = "Visible";
+
+            ModelLayer.WarehousePresentation.SendMessageAsync("main page button click");
         }
 
         #endregion public API

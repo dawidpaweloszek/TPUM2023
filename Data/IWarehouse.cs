@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace Data
 {
@@ -14,5 +15,6 @@ namespace Data
         public List<IWeapon> GetWeaponsOfOrigin(CountryOfOrigin origin);
         public List<IWeapon> GetWeaponsByID(List<Guid> Ids);
         public void ChangePrice(Guid id, float newPrice);
+        public Task SendAsync(string mesg);
     }
 }

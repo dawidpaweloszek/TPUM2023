@@ -76,5 +76,10 @@ namespace Data
             EventHandler<PriceChangeEventArgs> handler = PriceChange;
             handler?.Invoke(this, new PriceChangeEventArgs(id, price));
         }
+
+        public async Task SendAsync(string mesg)
+        {
+            await WebSocketClient.CurrentConnection.SendAsync(mesg);
+        }
     }
 }

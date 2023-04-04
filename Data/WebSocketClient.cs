@@ -20,8 +20,9 @@ namespace Data
             {
                 case WebSocketState.Open:
                     //log($"Opening WebSocket connection to remote server {peer}");
-                    WebSocketConnection _socket = new ClintWebSocketConnection(m_ClientWebSocket, peer, log);
-                    return _socket;
+                    WebSocketConnection socket = new ClintWebSocketConnection(m_ClientWebSocket, peer, log);
+                    CurrentConnection = socket;
+                    return socket;
 
                 default:
                     log?.Invoke($"Cannot connect to remote node status {m_ClientWebSocket.State}");

@@ -67,5 +67,10 @@ namespace Logic
             EventHandler<PriceChangeEventArgs> handler = PriceChanged;
             handler?.Invoke(this, new Logic.PriceChangeEventArgs(e.Id, e.Price));
         }
+
+        public async Task SendMessageAsync(string mesg)
+        {
+            await warehouse.SendAsync(mesg);
+        }
     }
 }
