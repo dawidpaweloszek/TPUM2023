@@ -11,12 +11,14 @@ namespace Data
     {
         public event EventHandler<PriceChangeEventArgs> PriceChange;
         private bool waitingForStockUpdate;
+        private List<IObserver<IWeapon>> observers;
 
         public List<IWeapon> Stock { get; private set; }
 
         public Warehouse() 
         { 
             Stock = new List<IWeapon>();
+            observers = new List<IObserver<IWeapon>>();
 
             waitingForStockUpdate = false;
 
@@ -31,9 +33,20 @@ namespace Data
 
         public void AddWeapons(List<IWeapon> weapons)
         {
-            Stock.AddRange(weapons);
+            foreach(var weapon in weapons) 
+            {
+                AddWeapon(weapon);
+            }
         }
         
+        public void AddWeapon(IWeapon weapon)
+        {
+            Stock.Add(weapon);
+            foreach(var observer in observers)
+            {
+                observer.OnNext(weapon);
+            }
+        }
         public void RemoveWeapons(List<IWeapon> weapons)
         {
             weapons.ForEach(weapon => Stock.Remove(weapon));
@@ -86,7 +99,7 @@ namespace Data
         {
             waitingForStockUpdate = true;
             await WebSocketClient.CurrentConnection.SendAsync(mesg);
-            while (waitingForStockUpdate) { }
+            //while (waitingForStockUpdate) { }
         }
 
         public async Task RequestWeaponsUpdate()
@@ -99,13 +112,43 @@ namespace Data
             if (message.Contains("UpdateAll"))
             {
                 var json = message.Substring("UpdateAll".Length);
-                Stock = Serializer.JSONToWarehouse(json);
+                var weapons = Serializer.JSONToWarehouse(json);
+                foreach (var weapon in weapons) 
+                { 
+                    AddWeapon(weapon);
+                }
+                waitingForStockUpdate = false;
             }
         }
         private async void Connected()
         {
             WebSocketClient.CurrentConnection.OnMessage = ParseMessage;
             await RequestWeaponsUpdate();
+        }
+
+        public IDisposable Subscribe(IObserver<IWeapon> observer)
+        {
+            if (!observers.Contains(observer))
+                observers.Add(observer);
+            return new Unsubscriber(observers, observer);
+        }
+
+        private class Unsubscriber : IDisposable
+        {
+            private List<IObserver<IWeapon>> _observers;
+            private IObserver<IWeapon> _observer;
+
+            public Unsubscriber(List<IObserver<IWeapon>> observers, IObserver<IWeapon> observer)
+            {
+                this._observers = observers;
+                this._observer = observer;
+            }
+
+            public void Dispose()
+            {
+                if (_observer != null && _observers.Contains(_observer))
+                    _observers.Remove(_observer);
+            }
         }
     }
 }

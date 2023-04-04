@@ -38,6 +38,7 @@ namespace PresentationViewModel
                 Weapons.Add(weapon);
             }
             ModelLayer.WarehousePresentation.PriceChanged += OnPriceChanged;
+            ModelLayer.WarehousePresentation.WeaponChanged += OnWeaponChanged;
             shoppingCart = ModelLayer.ShoppingCart;
             ButtomClick = new GalaSoft.MvvmLight.Command.RelayCommand(() => ClickHandler());
             ShoppingCartButtonClick = new GalaSoft.MvvmLight.Command.RelayCommand(() => ShoppingCartButtonClickHandler());
@@ -53,6 +54,26 @@ namespace PresentationViewModel
 
             ConnectButtonClick = new GalaSoft.MvvmLight.Command.RelayCommand(() => ConnectButtonClickHandler());
             ConnectionService = ServiceFactory.CreateConnectionService;
+        }
+
+        private void OnWeaponChanged(object? sender, WeaponPresentation e)
+        {
+            ObservableCollection<WeaponPresentation> newWeapons = new ObservableCollection<WeaponPresentation>(Weapons);
+            WeaponPresentation weapon = newWeapons.FirstOrDefault(x => x.Id == e.Id);
+
+            if (weapon != null)
+            {
+                int weaponIndex = newWeapons.IndexOf(weapon);
+                newWeapons[weaponIndex].Name = e.Name;
+                newWeapons[weaponIndex].Id = e.Id;
+                newWeapons[weaponIndex].Price = e.Price;
+                newWeapons[weaponIndex].Type = e.Type;
+            }
+            else
+            {
+                newWeapons.Add(e);
+            }
+            Weapons = new ObservableCollection<WeaponPresentation>(newWeapons);
         }
 
         private void OnPriceChanged(object sender, PresentationModel.PriceChangeEventArgs e)
@@ -222,6 +243,12 @@ namespace PresentationViewModel
             if (result)
             {
                 ConnectButtonText = "połączono";
+                Weapons.Clear();
+                foreach (WeaponPresentation weapon in ModelLayer.WarehousePresentation.GetWeapons()) 
+                {
+                    Weapons.Add(weapon);
+                }
+
             }
         }
 

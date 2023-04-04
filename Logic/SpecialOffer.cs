@@ -16,11 +16,13 @@ namespace Logic
         public SpecialOffer(IWarehouse warehouse)
         {
             SaleTimer = new System.Timers.Timer(2137);
-            SaleTimer.Elapsed += GetNewSale;
+            /*SaleTimer.Elapsed += GetNewSale;
             SaleTimer.AutoReset = true;
-            SaleTimer.Enabled = true;
+            SaleTimer.Enabled = true;*/
             Warehouse = warehouse;
             Rand = new Random();
+            Sale = 1f;
+            WeaponOnSaleId = Guid.Empty;
         }
 
         public Tuple<Guid, float> GetSpecialOffer()

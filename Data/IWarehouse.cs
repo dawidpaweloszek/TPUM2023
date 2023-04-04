@@ -4,7 +4,7 @@ using System.Threading.Tasks;
 
 namespace Data
 {
-    public interface IWarehouse
+    public interface IWarehouse : IObservable<IWeapon>
     {
         public event EventHandler<PriceChangeEventArgs> PriceChange;
 

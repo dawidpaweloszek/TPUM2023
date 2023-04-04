@@ -76,5 +76,9 @@ namespace LogicTest
         {
             throw new NotImplementedException();
         }
+        public IDisposable Subscribe(IObserver<IWeapon> observer)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

@@ -14,6 +14,14 @@ namespace PresentationModel
         {
             Shop = shop;
             Shop.PriceChanged += OnPriceChanged;
+            Shop.OnWeaponChanged += OnWeaponChanged;
+        }
+
+        private void OnWeaponChanged(object? sender, IWeaponDTO e)
+        {
+            EventHandler<WeaponPresentation> handler = WeaponChanged;
+            WeaponPresentation weapon = new WeaponPresentation(e.Name, e.Price, e.Id, e.Origin, e.Type);
+            handler?.Invoke(this, weapon);
         }
         private void OnPriceChanged(object sender, Logic.PriceChangeEventArgs e)
         {
@@ -37,5 +45,6 @@ namespace PresentationModel
         }
 
         public event EventHandler<PresentationModel.PriceChangeEventArgs> PriceChanged;
+        public event EventHandler<WeaponPresentation> WeaponChanged;
     }
 }
