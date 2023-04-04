@@ -5,29 +5,30 @@ using System.Linq;
 using System.Text;
 using System.Text.Json;
 using System.Threading.Tasks;
+using LogicServer;
 
 namespace PresentationServer
 {
     public abstract class Serializer
     {
-        public static string WeaponToJSON(IWeapon weapon)
+        public static string WeaponToJSON(IWeaponDTO weapon)
         {
             return JsonSerializer.Serialize(weapon);
         }
 
-        public static IWeapon JSONToWeapon(string json)
+        public static IWeaponDTO JSONToWeapon(string json)
         {
-            return JsonSerializer.Deserialize<Weapon>(json);
+            return JsonSerializer.Deserialize<WeaponDTO>(json);
         }
 
-        public static string WarehouseToJSON(List<IWeapon> weapons)
+        public static string WarehouseToJSON(List<IWeaponDTO> weapons)
         {
             return JsonSerializer.Serialize(weapons);
         }
 
-        public static List<IWeapon> JSONToWarehouse(string json)
+        public static List<IWeaponDTO> JSONToWarehouse(string json)
         {
-            return new List<IWeapon>(JsonSerializer.Deserialize<List<Weapon>>(json)!);
+            return new List<IWeaponDTO>(JsonSerializer.Deserialize<List<WeaponDTO>>(json));
         }
     }
 }

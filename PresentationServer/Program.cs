@@ -5,14 +5,21 @@ using System.Text;
 using System.Net;
 using System.Globalization;
 using System.Threading.Tasks;
+using DataServer;
+using LogicServer;
 
 namespace PresentationServer
 {
     internal class Program
     {
+        static IShop shop;
+        private static ILogicLayer logicLayer;
+
         static async Task Main(string[] args)
         {
             Console.WriteLine("Server started");
+            logicLayer = ILogicLayer.Create();
+            shop = logicLayer.Shop;
             await WebSocketServer.Server(8081, ConnectionHandler);
         }
 
@@ -29,7 +36,24 @@ namespace PresentationServer
         {
             Console.WriteLine($"[Client]: {message}");
             if (message == "main page button click")
-                SendMessageAsync("main page button click response");
+            {
+                await SendMessageAsync("main page button click response");
+            }
+
+            if (message == "RequestAll")
+            {
+                await SendCurrentWarehouseState();
+            }
+            
+        }
+
+        static async Task SendCurrentWarehouseState()
+        {
+            var weapons = shop.GetWeapons();
+            var json = Serializer.WarehouseToJSON(weapons);
+            var message = "UpdateAll" + json;
+
+            await SendMessageAsync(message);
         }
 
         static async Task SendMessageAsync(string message)
