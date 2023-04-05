@@ -10,6 +10,8 @@ namespace LogicTest
         public List<IWeapon> Stock { get; }
 
         public event EventHandler<PriceChangeEventArgs> PriceChange;
+        public event EventHandler TransactionFailed;
+        public event EventHandler<List<IWeapon>> TransactionSucceeded;
 
         public WarehouseTest() 
         { 
@@ -68,22 +70,22 @@ namespace LogicTest
             EventHandler<PriceChangeEventArgs> handler = PriceChange;
             handler?.Invoke(this, new PriceChangeEventArgs(id, price));
         }
-        public Task RequestWeaponsUpdate()
+        public async Task RequestWeaponsUpdate()
         {
-            throw new NotImplementedException();
+            
         }
-        public Task SendAsync(string message)
+        public async Task SendAsync(string message)
         {
-            throw new NotImplementedException();
+            
         }
         public IDisposable Subscribe(IObserver<IWeapon> observer)
         {
-            throw new NotImplementedException();
+            return null;
         }
 
-        public Task<bool> TryBuying(List<IWeapon> weapons)
+        public async Task TryBuying(List<IWeapon> weapons)
         {
-            throw new NotImplementedException();
+            RemoveWeapons(weapons);
         }
     }
 }
