@@ -20,6 +20,11 @@ namespace PresentationServer
             Console.WriteLine("Server started");
             logicLayer = ILogicLayer.Create();
             shop = logicLayer.Shop;
+            shop.PriceChanged += async (sender, eventArgs) =>
+            {
+                if (WebSocketServer.CurrentConnection != null)
+                    await SendMessageAsync("PriceChanged" + eventArgs.Price.ToString() + "/" + eventArgs.Id.ToString());
+            };
             await WebSocketServer.Server(8081, ConnectionHandler);
         }
 

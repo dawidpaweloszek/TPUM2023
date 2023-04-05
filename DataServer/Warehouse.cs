@@ -12,6 +12,7 @@ namespace DataServer
         public event EventHandler<PriceChangeEventArgs> PriceChange;
 
         public List<IWeapon> Stock { get; }
+        private readonly object dataLock = new object();
 
         public Warehouse() 
         { 
@@ -67,7 +68,10 @@ namespace DataServer
             if (Math.Abs(newPrice - weapon.Price) < 0.01f)
                 return;
 
-            weapon.Price = newPrice;
+            lock (dataLock)
+            {
+                weapon.Price = newPrice;
+            }
             OnPriceChanged(weapon.Id, weapon.Price);
         }
 

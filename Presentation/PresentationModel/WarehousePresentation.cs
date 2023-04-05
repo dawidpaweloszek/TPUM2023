@@ -16,9 +16,15 @@ namespace PresentationModel
             Shop.PriceChanged += OnPriceChanged;
             Shop.OnWeaponChanged += OnWeaponChanged;
             Shop.TransactionFailed += OnTransactionFailed;
+            Shop.OnWeaponRemoved += OnWeaponRemoved;
             Shop.TransactionSucceeded += OnTransactionSucceeded;
         }
-
+        private void OnWeaponRemoved(object? sender, IWeaponDTO e)
+        {
+            EventHandler<WeaponPresentation> handler = WeaponRemoved;
+            WeaponPresentation Weapon = new WeaponPresentation(e.Name, e.Price, e.Id, e.Origin, e.Type);
+            handler?.Invoke(this, Weapon);
+        }
         private void OnTransactionSucceeded(object? sender, List<IWeaponDTO> e)
         {
             EventHandler<List<WeaponPresentation>> handler = TransactionSucceeded;
@@ -68,6 +74,7 @@ namespace PresentationModel
 
         public event EventHandler<PresentationModel.PriceChangeEventArgs> PriceChanged;
         public event EventHandler<WeaponPresentation> WeaponChanged;
+        public event EventHandler<WeaponPresentation> WeaponRemoved;
         public event EventHandler<List<WeaponPresentation>> TransactionSucceeded;
         public event EventHandler TransactionFailed;
     }

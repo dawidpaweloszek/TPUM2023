@@ -63,18 +63,19 @@ namespace Data
 
         public void RemoveSingleWeapon(IWeapon weapon)
         {
-            if (Stock.Find(x => x.Id == weapon.Id) == null) 
+            IWeapon weaponToRemove = Stock.Find(x => x.Id == weapon.Id);
+            if (weaponToRemove == null) 
                 return;
 
-            Stock.Remove(weapon);
+            Stock.Remove(weaponToRemove);
 
-            weapon.Name = "";
-            weapon.Price = -1f;
-            weapon.Type = WeaponType.Deleted;
-            weapon.Origin = CountryOfOrigin.Deleted;
+            weaponToRemove.Name = "";
+            weaponToRemove.Price = -1f;
+            weaponToRemove.Type = WeaponType.Deleted;
+            weaponToRemove.Origin = CountryOfOrigin.Deleted;
 
             foreach (var observer in observers)
-                observer.OnNext(weapon);
+                observer.OnNext(weaponToRemove);
         }
 
         public List<IWeapon> GetWeaponsOfType(WeaponType type)
@@ -158,6 +159,14 @@ namespace Data
                     EventHandler<List<IWeapon>> handler = TransactionSucceeded;
                     handler?.Invoke(this, Serializer.JSONToWarehouse(resString.Substring(1)));
                 }
+
+                waitingForSellResponse = false;
+            }
+            else if (message.Contains("PriceChanged"))
+            {
+                string priceChangedStr = message.Substring("PriceChanged".Length);
+                string[] parts = priceChangedStr.Split("/");
+                ChangePrice(Guid.Parse(parts[1]), float.Parse(parts[0]));
             }
         }
 

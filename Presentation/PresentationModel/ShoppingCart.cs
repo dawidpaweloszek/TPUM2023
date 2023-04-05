@@ -41,7 +41,11 @@ namespace PresentationModel
 
 
             foreach (WeaponPresentation weaponPresentation in Weapons)
-                shoppingList.Add(Shop.GetWeapons().FirstOrDefault(x => x.Id == weaponPresentation.Id));
+            {
+                IWeaponDTO weapon = Shop.GetWeapons().FirstOrDefault(x => x.Id == weaponPresentation.Id);
+                weapon.Price = weaponPresentation.Price;
+                shoppingList.Add(weapon);
+            }
 
             await Shop.Sell(shoppingList);
             Weapons.Clear();

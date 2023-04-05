@@ -13,6 +13,7 @@ namespace LogicServer
 
         private IWarehouse warehouse;
         private ISpecialOffer specialOffer;
+        private readonly object _dataLock = new object();
 
         public Shop(IWarehouse warehouse)
         {
@@ -27,40 +28,36 @@ namespace LogicServer
 
             foreach (IWeapon weapon in warehouse.Stock)
             {
-                var dto = new WeaponDTO();
-                dto.Name = weapon.Name;
-                dto.Price = weapon.Price;
-                dto.Id = weapon.Id;
-                dto.Type = (int)weapon.Type;
-                dto.Origin = (int)weapon.Origin;
-
-                availableWeapons.Add(dto);
+                availableWeapons.Add(new WeaponDTO { Price = weapon.Price, Id = weapon.Id, Name = weapon.Name, Type = (int)weapon.Type, Origin = (int)weapon.Origin });
             }
 
             return availableWeapons;
         }
 
-        public bool Sell(List<IWeaponDTO> weapons)
+        public bool Sell(List<IWeaponDTO> weaponsDTO)
         {
-            List<Guid> weaponIds = new List<Guid>();
-
-            foreach (var weapon in weapons) // TODO: @Dawid - check this one later
-                weaponIds.Add(weapon.Id);
-
-            List<IWeapon> weaponsDataLayer = warehouse.GetWeaponsByID(weaponIds);
-            if (weaponsDataLayer.Count != weapons.Count)
-                return false;
-
-            foreach (IWeaponDTO weaponDTO in weapons)
+            lock (_dataLock)
             {
-                var warehouseWeapon = weaponsDataLayer.First(x => x.Id == weaponDTO.Id);
-                if (warehouseWeapon.Price != weaponDTO.Price)
-                    return false;
+                List<Guid> guids = new List<Guid>();
+
+                foreach(IWeaponDTO weaponDTO in weaponsDTO)
+                {
+                    guids.Add(weaponDTO.Id);
+                }
+
+                List<IWeapon> weapons = warehouse.GetWeaponsByID(guids);
+                if (weapons.Count != weaponsDTO.Count) return false;
+
+                foreach (IWeaponDTO weaponDTO in weaponsDTO)
+                {
+                    var warehouseWeapon = weapons.First( x => x.Id == weaponDTO.Id );
+                    if (warehouseWeapon.Price != weaponDTO.Price) return false;
+                }
+
+                warehouse.RemoveWeapons(weapons);
+
+                return true;
             }
-
-            warehouse.RemoveWeapons(weaponsDataLayer);
-
-            return true;
         }
 
         private void OnPriceChanged(object sender, DataServer.PriceChangeEventArgs e) 

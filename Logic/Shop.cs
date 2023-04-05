@@ -81,6 +81,15 @@ namespace Logic
                 weaponIds.Add(weapon.Id);
 
             List<IWeapon> weaponsDataLayer = warehouse.GetWeaponsByID(weaponIds);
+
+            foreach (WeaponDTO weapon in weapons)
+            {
+                IWeapon wp = weaponsDataLayer.Find(x => x.Id == weapon.Id);
+                if (wp != null)
+                {
+                    wp.Price = weapon.Price;
+                }
+            }
             await warehouse.TryBuying(weaponsDataLayer);
         }
 

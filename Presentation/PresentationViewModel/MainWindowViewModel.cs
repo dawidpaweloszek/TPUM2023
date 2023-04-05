@@ -36,6 +36,7 @@ namespace PresentationViewModel
             }
             ModelLayer.WarehousePresentation.PriceChanged += OnPriceChanged;
             ModelLayer.WarehousePresentation.WeaponChanged += OnWeaponChanged;
+            ModelLayer.WarehousePresentation.WeaponRemoved += OnWeaponRemoved;
 
             ModelLayer.WarehousePresentation.TransactionFailed += OnTransactionFailed;
             ModelLayer.WarehousePresentation.TransactionSucceeded += OnTransactionSucceeded;
@@ -53,6 +54,20 @@ namespace PresentationViewModel
 
             ConnectButtonClick = new GalaSoft.MvvmLight.Command.RelayCommand(() => ConnectButtonClickHandler());
             ConnectionService = ServiceFactory.CreateConnectionService;
+        }
+
+        private void OnWeaponRemoved(object? sender, WeaponPresentation e)
+        {
+            ObservableCollection<WeaponPresentation> newWeapons = new ObservableCollection<WeaponPresentation>(Weapons);
+            WeaponPresentation Weapon = newWeapons.FirstOrDefault(x => x.Id == e.Id);
+
+            if (Weapon != null)
+            {
+                int weaponIndex = newWeapons.IndexOf(Weapon);
+                newWeapons.RemoveAt(weaponIndex);
+            }
+
+            Weapons = new ObservableCollection<WeaponPresentation>(newWeapons);
         }
 
         private void OnTransactionSucceeded(object? sender, List<WeaponPresentation> e)
@@ -232,15 +247,18 @@ namespace PresentationViewModel
             }
         }
 
-        private async void BuyButtonClickHandler()
+        private void BuyButtonClickHandler()
         {
-            ShoppingCart.Buy();
-            ShoppingCartSum = ShoppingCart.Sum();
-            Weapons.Clear();
-            foreach (WeaponPresentation weapon in ModelLayer.WarehousePresentation.GetWeapons())
+            Task.Run(async () =>
             {
-                Weapons.Add(weapon);
-            }
+                await ShoppingCart.Buy();
+                ShoppingCartSum = ShoppingCart.Sum();
+                Weapons.Clear();
+                foreach (WeaponPresentation weapon in ModelLayer.WarehousePresentation.GetWeapons())
+                {
+                    Weapons.Add(weapon);
+                }
+            });
         }
         private void ShoppingCartButtonClickHandler()
         {
