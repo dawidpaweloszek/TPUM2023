@@ -33,8 +33,14 @@ namespace PresentationServer
             Console.WriteLine("[Server]: Client connected");
             WebSocketServer.CurrentConnection = webSocketConnection;
             webSocketConnection.OnMessage = ParseMessage;
-            webSocketConnection.OnClose = () => { Console.WriteLine("[Server]: Connection closed"); };
-            webSocketConnection.OnError = () => { Console.WriteLine("[Server]: Connection error encountered"); };
+            webSocketConnection.OnClose = () => {
+                Console.WriteLine("[Server]: Connection closed");
+                WebSocketServer.CurrentConnection = null;
+            };
+            webSocketConnection.OnError = () => { 
+                Console.WriteLine("[Server]: Connection error encountered"); 
+                WebSocketServer.CurrentConnection = null; 
+            };
         }
 
         static async void ParseMessage(string message)

@@ -1,4 +1,4 @@
-using System.Collections.Generic;
+ï»¿using System.Collections.Generic;
 using Microsoft.VisualStudio.TestPlatform.ObjectModel;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using DataServer;
@@ -9,6 +9,7 @@ namespace DataTestServer
     public class WarehouseTest
     {
         private IWarehouse warehouse;
+
         [TestInitialize]
         public void Initialize()
         {
@@ -19,9 +20,9 @@ namespace DataTestServer
 
             List<IWeapon> weaponsToAdd = new List<IWeapon>();
             weaponsToAdd.Add(new Weapon("Miecz Absolutny", 230f, CountryOfOrigin.Poland, WeaponType.TwoHandedSword));
-            weaponsToAdd.Add(new Weapon("M³ot okrutny", 2220f, CountryOfOrigin.China, WeaponType.WarHammer));
+            weaponsToAdd.Add(new Weapon("MÅ‚ot okrutny", 2220f, CountryOfOrigin.China, WeaponType.WarHammer));
             weaponsToAdd.Add(new Weapon("Katana uwu", 1140f, CountryOfOrigin.Japan, WeaponType.Katana));
-            weaponsToAdd.Add(new Weapon("Topór ostry", 510f, CountryOfOrigin.England, WeaponType.BattleAxe));
+            weaponsToAdd.Add(new Weapon("TopÃ³r ostry", 510f, CountryOfOrigin.England, WeaponType.BattleAxe));
 
             warehouse.AddWeapons(weaponsToAdd);
         }
@@ -31,13 +32,14 @@ namespace DataTestServer
         {
             List<IWeapon> weaponsToAdd = new List<IWeapon>();
             weaponsToAdd.Add(new Weapon("Miecz Absolutny dodany", 230f, CountryOfOrigin.Poland, WeaponType.TwoHandedSword));
-            weaponsToAdd.Add(new Weapon("M³ot okrutny dodany", 2220f, CountryOfOrigin.China, WeaponType.WarHammer));
+            weaponsToAdd.Add(new Weapon("MÅ‚ot okrutny dodany", 2220f, CountryOfOrigin.China, WeaponType.WarHammer));
             weaponsToAdd.Add(new Weapon("Katana uwu dodany", 1140f, CountryOfOrigin.Japan, WeaponType.Katana));
-            weaponsToAdd.Add(new Weapon("Topór ostry dodany", 510f, CountryOfOrigin.England, WeaponType.BattleAxe));
+            weaponsToAdd.Add(new Weapon("TopÃ³r ostry dodany", 510f, CountryOfOrigin.England, WeaponType.BattleAxe));
 
             warehouse.AddWeapons(weaponsToAdd);
             Assert.AreEqual(8, warehouse.Stock.Count);
         }
+
         [TestMethod]
         public void GetWeaponTest()
         {
@@ -46,6 +48,7 @@ namespace DataTestServer
             Assert.IsNotNull(katanas);
             Assert.AreEqual(1, katanas.Count);
         }
+
         [TestMethod]
         public void RemoveWeapons()
         {

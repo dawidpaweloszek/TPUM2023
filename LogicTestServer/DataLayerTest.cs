@@ -10,7 +10,7 @@ namespace LogicTestServer
 
         public DataLayerTest(IWarehouse warehouse)
         {
-            Warehouse = warehouse ?? new WarehouseTestExample();
+            Warehouse = warehouse ?? new WarehouseTest();
             //Warehouse = new WarehouseTestExample();
             //Warehouse.Stock.Clear();
         }

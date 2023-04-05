@@ -1,14 +1,12 @@
 ﻿using Logic;
-using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace PresentationModel
 {
-    public class ShoppingCart
+    internal class ShoppingCart : IShoppingCart
     {
         public ObservableCollection<WeaponPresentation> Weapons { get; set; }
         private IShop Shop { get; set; }

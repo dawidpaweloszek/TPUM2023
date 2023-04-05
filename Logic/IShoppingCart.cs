@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Logic
 {
-    public interface IShoppingCart
+    internal interface IShoppingCart
     {
         bool AddWeapon(IWeaponDTO weapon);
         bool RemoveWeapon(IWeaponDTO weapon);

@@ -1,12 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Text;
 using Logic;
 using System.Threading.Tasks;
 
 namespace PresentationModel
 {
-    public class WarehousePresentation
+    internal class WarehousePresentation : IWarehousePresentation
     {
         private IShop Shop { get; set; }
 
@@ -72,7 +71,7 @@ namespace PresentationModel
             Shop.SendMessageAsync(mesg);
         }
 
-        public event EventHandler<PresentationModel.PriceChangeEventArgs> PriceChanged;
+        public event EventHandler<PriceChangeEventArgs> PriceChanged;
         public event EventHandler<WeaponPresentation> WeaponChanged;
         public event EventHandler<WeaponPresentation> WeaponRemoved;
         public event EventHandler<List<WeaponPresentation>> TransactionSucceeded;

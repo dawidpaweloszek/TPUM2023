@@ -5,9 +5,9 @@ using DataServer;
 
 namespace LogicTestServer
 {
-    internal class WarehouseTestExample : IWarehouse
+    internal class WarehouseTest : IWarehouse
     {
-        public WarehouseTestExample()
+        public WarehouseTest()
         {
             Stock = new List<IWeapon>();
         }

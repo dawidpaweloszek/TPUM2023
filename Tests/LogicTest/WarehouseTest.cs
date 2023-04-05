@@ -70,14 +70,17 @@ namespace LogicTest
             EventHandler<PriceChangeEventArgs> handler = PriceChange;
             handler?.Invoke(this, new PriceChangeEventArgs(id, price));
         }
+        
         public async Task RequestWeaponsUpdate()
         {
             
         }
+
         public async Task SendAsync(string message)
         {
             
         }
+
         public IDisposable Subscribe(IObserver<IWeapon> observer)
         {
             return null;

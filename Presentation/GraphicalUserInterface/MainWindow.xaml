@@ -22,8 +22,8 @@
                 </StackPanel>
 
                 <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
-                    <TextBlock x:Name="PromotionLink" FontSize="28">
-                    </TextBlock>
+                    <!--<TextBlock x:Name="PromotionLink" FontSize="28">-->
+                    <!--</TextBlock>-->
                 </StackPanel>
 
                 <StackPanel Orientation="Horizontal">

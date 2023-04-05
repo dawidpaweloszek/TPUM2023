@@ -6,11 +6,8 @@ using System.Windows.Input;
 using PresentationModel;
 using PresentationViewModel.MVVMLight;
 using System.Collections.ObjectModel;
-using Microsoft.Toolkit.Mvvm;
 using GalaSoft.MvvmLight.Command;
-using System.Timers;
 using Logic;
-using Data;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -25,22 +22,21 @@ namespace PresentationViewModel
 
         public MainWindowViewModel(ModelAbstractApi modelAbstractApi)
         {
-            ModelLayer = modelAbstractApi;
-            ColorString = ModelLayer.ColorString;
-            MainViewVisibility = ModelLayer.MainViewVisibility;
-            ShoppingCartViewVisibility = ModelLayer.ShoppingCartViewVisibility;
+            modelLayer = modelAbstractApi;
+            MainViewVisibility = modelLayer.MainViewVisibility;
+            ShoppingCartViewVisibility = modelLayer.ShoppingCartViewVisibility;
             weapons = new ObservableCollection<WeaponPresentation>();
-            foreach (WeaponPresentation weapon in ModelLayer.WarehousePresentation.GetWeapons())
+            foreach (WeaponPresentation weapon in modelLayer.WarehousePresentation.GetWeapons())
             {
                 Weapons.Add(weapon);
             }
-            ModelLayer.WarehousePresentation.PriceChanged += OnPriceChanged;
-            ModelLayer.WarehousePresentation.WeaponChanged += OnWeaponChanged;
-            ModelLayer.WarehousePresentation.WeaponRemoved += OnWeaponRemoved;
+            modelLayer.WarehousePresentation.PriceChanged += OnPriceChanged;
+            modelLayer.WarehousePresentation.WeaponChanged += OnWeaponChanged;
+            modelLayer.WarehousePresentation.WeaponRemoved += OnWeaponRemoved;
 
-            ModelLayer.WarehousePresentation.TransactionFailed += OnTransactionFailed;
-            ModelLayer.WarehousePresentation.TransactionSucceeded += OnTransactionSucceeded;
-            shoppingCart = ModelLayer.ShoppingCart;
+            modelLayer.WarehousePresentation.TransactionFailed += OnTransactionFailed;
+            modelLayer.WarehousePresentation.TransactionSucceeded += OnTransactionSucceeded;
+            shoppingCart = modelLayer.ShoppingCart;
             ShoppingCartButtonClick = new GalaSoft.MvvmLight.Command.RelayCommand(() => ShoppingCartButtonClickHandler());
             MainPageButtonClick = new GalaSoft.MvvmLight.Command.RelayCommand(() => MainPageButtonClickHandler());
             AxesButtonClick = new GalaSoft.MvvmLight.Command.RelayCommand(() => AxesButtonClickHandler());
@@ -53,7 +49,8 @@ namespace PresentationViewModel
             WeaponButtonClick = new RelayCommand<Guid>((id) => WeaponButtonClickHandler(id));
 
             ConnectButtonClick = new GalaSoft.MvvmLight.Command.RelayCommand(() => ConnectButtonClickHandler());
-            ConnectionService = ServiceFactory.CreateConnectionService;
+            connectionService = ServiceFactory.CreateConnectionService;
+            connectionService.ConnectionLogger += s => Log = s;
         }
 
         private void OnWeaponRemoved(object? sender, WeaponPresentation e)
@@ -70,6 +67,16 @@ namespace PresentationViewModel
             Weapons = new ObservableCollection<WeaponPresentation>(newWeapons);
         }
 
+        public string Log
+        {
+            get => log;
+            set
+            {
+                log = value;
+                RaisePropertyChanged("Log");
+            }
+        }
+
         private void OnTransactionSucceeded(object? sender, List<WeaponPresentation> e)
         {
             TransactionStatusText = "Bron zakupiona";
@@ -79,6 +86,7 @@ namespace PresentationViewModel
         {
             TransactionStatusText = "Bron nie zostala kupiona";
         }
+
         private void OnWeaponChanged(object? sender, WeaponPresentation e)
         {
             ObservableCollection<WeaponPresentation> newWeapons = new ObservableCollection<WeaponPresentation>(Weapons);
@@ -113,50 +121,38 @@ namespace PresentationViewModel
             Weapons = new ObservableCollection<WeaponPresentation>(newWeapons);
         }
 
-        public string ColorString
-        {
-            get { return b_colorString; }
-            set
-            {
-                if (value.Equals(b_colorString))
-                    return;
-                b_colorString = value;
-                RaisePropertyChanged("ColorString");
-            }
-        }
-
         public string ConnectButtonText
         {
-            get { return b_connectButtonText; }
+            get { return connectButtonText; }
             set
             {
-                if (value.Equals(b_connectButtonText))
+                if (value.Equals(connectButtonText))
                     return;
-                b_connectButtonText = value;
+                connectButtonText = value;
                 RaisePropertyChanged("ConnectButtonText");
             }
         }
 
         public string MainViewVisibility
         {
-            get { return b_mainViewVisibility; }
+            get { return mainViewVisibility; }
             set
             {
-                if (value.Equals(b_mainViewVisibility))
+                if (value.Equals(mainViewVisibility))
                     return;
-                b_mainViewVisibility = value;
+                mainViewVisibility = value;
                 RaisePropertyChanged("MainViewVisibility");
             }
         }
 
         public string ShoppingCartViewVisibility
         {
-            get { return b_shoppingCartViewVisibility; }
+            get { return shoppingCartViewVisibility; }
             set
             {
-                if (value.Equals(b_shoppingCartViewVisibility))
+                if (value.Equals(shoppingCartViewVisibility))
                     return;
-                b_shoppingCartViewVisibility = value;
+                shoppingCartViewVisibility = value;
                 RaisePropertyChanged("ShoppingCartViewVisibility");
             }
         }
@@ -185,7 +181,7 @@ namespace PresentationViewModel
             }
         }
 
-        public ShoppingCart ShoppingCart
+        public IShoppingCart ShoppingCart
         {
             get { return shoppingCart; }
             set
@@ -194,17 +190,6 @@ namespace PresentationViewModel
                     return;
                 shoppingCart = value;
                 RaisePropertyChanged("ShoppingCart");
-            }
-        }
-
-        public IList<object> CirclesCollection
-        {
-            get { return b_CirclesCollection; }
-            set
-            {
-                if (value.Equals(b_CirclesCollection))
-                    return;
-                RaisePropertyChanged("CirclesCollection");
             }
         }
 
@@ -233,17 +218,24 @@ namespace PresentationViewModel
 
         private async Task ConnectButtonClickHandler()
         {
-            ConnectButtonText = "łączenie";
-            bool result = await ConnectionService.Connect(new Uri("ws://localhost:8081"));
-            if (result)
+            if (!connectionService.Connected)
             {
-                ConnectButtonText = "połączono";
-                Weapons.Clear();
-                foreach (WeaponPresentation weapon in ModelLayer.WarehousePresentation.GetWeapons()) 
-                {
-                    Weapons.Add(weapon);
-                }
+                ConnectButtonText = "łączenie";
+                bool result = await connectionService.Connect(new Uri("ws://localhost:8081"));
 
+                if (result)
+                {
+                    ConnectButtonText = "połączono";
+                    Weapons.Clear();
+                    foreach (WeaponPresentation weapon in modelLayer.WarehousePresentation.GetWeapons())
+                        Weapons.Add(weapon);
+                }
+            }
+            else
+            {
+                await connectionService.Disconnect();
+                ConnectButtonText = "rozłączono";
+                Weapons.Clear();
             }
         }
 
@@ -252,7 +244,7 @@ namespace PresentationViewModel
             ShoppingCart.Buy();
             ShoppingCartSum = ShoppingCart.Sum();
             Weapons.Clear();
-            foreach (WeaponPresentation weapon in ModelLayer.WarehousePresentation.GetWeapons())
+            foreach (WeaponPresentation weapon in modelLayer.WarehousePresentation.GetWeapons())
             {
                 Weapons.Add(weapon);
             }
@@ -262,12 +254,12 @@ namespace PresentationViewModel
             ShoppingCartViewVisibility = "Visible";
             MainViewVisibility = "Hidden";
 
-            ModelLayer.WarehousePresentation.SendMessageAsync("Shopping cart button clicked");
+            modelLayer.WarehousePresentation.SendMessageAsync("Shopping cart button clicked");
         }
 
         private void WeaponButtonClickHandler(Guid id)
         {
-            foreach (WeaponPresentation weapon in ModelLayer.WarehousePresentation.GetWeapons())
+            foreach (WeaponPresentation weapon in modelLayer.WarehousePresentation.GetWeapons())
             {
                 if (weapon.Id.Equals(id))
                 {
@@ -280,7 +272,7 @@ namespace PresentationViewModel
         private void AxesButtonClickHandler()
         {
             Weapons.Clear();
-            foreach (WeaponPresentation weapon in ModelLayer.WarehousePresentation.GetWeapons())
+            foreach (WeaponPresentation weapon in modelLayer.WarehousePresentation.GetWeapons())
             {
                 if (weapon.Type.Equals("BattleAxe"))
                     Weapons.Add(weapon);
@@ -290,7 +282,7 @@ namespace PresentationViewModel
         private void HammersButtonClickHandler()
         {
             Weapons.Clear();
-            foreach (WeaponPresentation weapon in ModelLayer.WarehousePresentation.GetWeapons())
+            foreach (WeaponPresentation weapon in modelLayer.WarehousePresentation.GetWeapons())
             {
                 if (weapon.Type.Equals("WarHammer"))
                     Weapons.Add(weapon);
@@ -300,7 +292,7 @@ namespace PresentationViewModel
         private void KatanasButtonClickHandler()
         {
             Weapons.Clear();
-            foreach (WeaponPresentation weapon in ModelLayer.WarehousePresentation.GetWeapons())
+            foreach (WeaponPresentation weapon in modelLayer.WarehousePresentation.GetWeapons())
             {
                 if (weapon.Type.Equals("Katana"))
                     Weapons.Add(weapon);
@@ -310,7 +302,7 @@ namespace PresentationViewModel
         private void SwordsButtonClickHandler()
         {
             Weapons.Clear();
-            foreach (WeaponPresentation weapon in ModelLayer.WarehousePresentation.GetWeapons())
+            foreach (WeaponPresentation weapon in modelLayer.WarehousePresentation.GetWeapons())
             {
                 if (weapon.Type.Equals("TwoHandedSword"))
                     Weapons.Add(weapon);
@@ -324,26 +316,24 @@ namespace PresentationViewModel
 
             TransactionStatusText = "";
 
-            ModelLayer.WarehousePresentation.SendMessageAsync("main page button click");
+            modelLayer.WarehousePresentation.SendMessageAsync("main page button click");
         }
 
         #endregion public API
 
         #region private
 
-        private IList<object> b_CirclesCollection;
-        private ShoppingCart shoppingCart;
+        private IShoppingCart shoppingCart;
         private float shoppingCartSum;
         private ObservableCollection<WeaponPresentation> weapons;
-        private string b_colorString;
-        private string b_mainViewVisibility;
-        private string b_shoppingCartViewVisibility;
-        private ModelAbstractApi ModelLayer;
-        private IConnectionService ConnectionService;
-        private string b_connectButtonText;
+        private string mainViewVisibility;
+        private string shoppingCartViewVisibility;
+        private ModelAbstractApi modelLayer;
+        private IConnectionService connectionService;
+        private string connectButtonText;
         private string transactionStatusText;
+        private string log = "Waiting for connection logs...";
 
         #endregion private
-
     }
 }

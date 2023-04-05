@@ -15,7 +15,7 @@ namespace LogicTestServer
         public void Initialize()
         {
             //dataLayer = IDataLayer.Create();
-            WarehouseTestExample warehouse = new WarehouseTestExample();
+            WarehouseTest warehouse = new WarehouseTest();
 
             List<IWeapon> weapons = new List<IWeapon>();
             weapons.Add(new Weapon("Katana szybciutka", 629f, CountryOfOrigin.Poland, WeaponType.Katana));
