@@ -11,36 +11,27 @@ namespace Logic
     {
         public event EventHandler<PriceChangeEventArgs> PriceChanged;
         public event EventHandler<IWeaponDTO> OnWeaponChanged;
+        public event EventHandler<IWeaponDTO> OnWeaponRemoved;
 
         private IWarehouse warehouse;
-        private ISpecialOffer specialOffer;
         private IDisposable unsubscriber;
 
         public Shop(IWarehouse warehouse)
         {
             this.warehouse = warehouse;
-            specialOffer = new SpecialOffer(warehouse);
             warehouse.PriceChange += OnPriceChanged;
             warehouse.Subscribe(this);
         }
 
-        public List<IWeaponDTO> GetWeapons(bool onSale = true)
+        public List<IWeaponDTO> GetWeapons()
         {
-            Tuple<Guid, float> sale = new Tuple<Guid, float>(Guid.Empty, 1f);
-            if (onSale)
-                sale = specialOffer.GetSpecialOffer();
-                
             List<IWeaponDTO> availableWeapons = new List<IWeaponDTO>();
 
             foreach (IWeapon weapon in warehouse.Stock)
             {
-                float price = weapon.Price;
-                if (weapon.Id.Equals(sale.Item1))
-                    price *= sale.Item2;
-
                 var dto = new WeaponDTO();
                 dto.Name = weapon.Name;
-                dto.Price = price;
+                dto.Price = weapon.Price;
                 dto.Id = weapon.Id;
                 dto.Type = weapon.Type.ToString();
                 dto.Origin = weapon.Origin.ToString();
@@ -51,7 +42,7 @@ namespace Logic
             return availableWeapons;
         }
 
-        public bool Sell(List<IWeaponDTO> weapons)
+        public async Task<bool> Sell(List<IWeaponDTO> weapons)
         {
             List<Guid> weaponIds = new List<Guid>();
 
@@ -59,10 +50,12 @@ namespace Logic
                 weaponIds.Add(weapon.Id);
 
             List<IWeapon> weaponsDataLayer = warehouse.GetWeaponsByID(weaponIds);
+            bool result = await warehouse.TryBuying(weaponsDataLayer);
 
-            warehouse.RemoveWeapons(weaponsDataLayer);
+            if (result)
+                warehouse.RemoveWeapons(weaponsDataLayer);
 
-            return true;
+            return result;
         }
 
         private void OnPriceChanged(object sender, Data.PriceChangeEventArgs e) 
@@ -83,7 +76,7 @@ namespace Logic
 
         public void OnError(Exception error)
         {
-            throw new NotImplementedException();
+            //throw new NotImplementedException();
         }
 
         public void OnNext(IWeapon value)
@@ -95,7 +88,10 @@ namespace Logic
             dto.Type = value.Type.ToString();
             dto.Origin = value.Origin.ToString();
 
-            OnWeaponChanged?.Invoke(this, dto);
+            if (value.Price < -0.01f && value.Name == "" && value.Type == WeaponType.Deleted && value.Origin == CountryOfOrigin.Deleted)
+                OnWeaponRemoved?.Invoke(this, dto);
+            else
+                OnWeaponChanged?.Invoke(this, dto);
         }
 
         private void Unsunscribe()

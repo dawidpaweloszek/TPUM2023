@@ -8,10 +8,10 @@ namespace PresentationServer
         public string Name { get; set; }
         public float Price { get; set; }
         public Guid Id { get; set; }
-        public string Origin { get; set; }
-        public string Type { get; set; }
+        public int Origin { get; set; }
+        public int Type { get; set; }
 
-        public WeaponDTO(string name, float price, Guid id, string origin, string type)
+        public WeaponDTO(string name, float price, Guid id, int origin, int type)
         {
             Name = name;
             Price = price;

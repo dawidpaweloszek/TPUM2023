@@ -8,6 +8,7 @@ namespace Data
 {
     public enum CountryOfOrigin
     {
+        Deleted,
         England,
         Germany,
         Japan,

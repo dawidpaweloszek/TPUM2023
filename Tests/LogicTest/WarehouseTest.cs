@@ -80,5 +80,10 @@ namespace LogicTest
         {
             throw new NotImplementedException();
         }
+
+        public Task<bool> TryBuying(List<IWeapon> weapons)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

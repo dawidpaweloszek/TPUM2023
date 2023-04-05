@@ -18,5 +18,6 @@ namespace Data
 
         public Task SendAsync(string mesg);
         public Task RequestWeaponsUpdate();
+        Task<bool> TryBuying(List<IWeapon> weapons);
     }
 }

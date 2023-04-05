@@ -35,21 +35,16 @@ namespace PresentationModel
             return res;
         }
 
-        public bool Buy()
+        public async Task<bool> Buy()
         {
             List<IWeaponDTO> shoppingList = new List<IWeaponDTO>();
 
 
             foreach (WeaponPresentation weaponPresentation in Weapons)
-            {
                 shoppingList.Add(Shop.GetWeapons().FirstOrDefault(x => x.Id == weaponPresentation.Id));
-            }
 
-            bool res = Shop.Sell(shoppingList);
-            if (res)
-            {
-                Weapons.Clear();
-            }
+            bool res = await Shop.Sell(shoppingList);
+            Weapons.Clear();
 
             return res;
         }

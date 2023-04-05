@@ -15,6 +15,15 @@ namespace Data
     internal class Weapon : IWeapon
     {
         [JsonConstructor]
+        public Weapon(string name, float price, Guid id, CountryOfOrigin origin, WeaponType type)
+        {
+            Name = name;
+            Price = price;
+            Origin = origin;
+            Id = id;
+            Type = type;
+        }
+
         public Weapon(string name, float price, CountryOfOrigin origin, WeaponType type)
         {
             Name = name;
@@ -24,7 +33,7 @@ namespace Data
             Type = type;
         }
 
-        public string Name { get; }
+        public string Name { get; set; }
         public float Price
         {
             get => price;
@@ -36,8 +45,9 @@ namespace Data
             }
         }
         public Guid Id { get; }
-        public CountryOfOrigin Origin { get; }
-        public WeaponType Type { get; }
+        public CountryOfOrigin Origin { get; set; }
+        public WeaponType Type { get; set; }
+
         private float price;
     }
 }

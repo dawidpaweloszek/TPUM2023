@@ -4,6 +4,7 @@ using System.Linq;
 using System.Runtime.Remoting;
 using System.Text;
 using System.Threading.Tasks;
+using System.Globalization;
 
 namespace Data
 {
@@ -11,6 +12,8 @@ namespace Data
     {
         public event EventHandler<PriceChangeEventArgs> PriceChange;
         private bool waitingForStockUpdate;
+        private bool waitingForSellResponse;
+        private bool transactionSuccess;
         private List<IObserver<IWeapon>> observers;
 
         public List<IWeapon> Stock { get; private set; }
@@ -21,6 +24,8 @@ namespace Data
             observers = new List<IObserver<IWeapon>>();
 
             waitingForStockUpdate = false;
+            waitingForSellResponse = false;
+            transactionSuccess = false;
 
             // TODO: @Ignacy - temporary we can add weapons here
             Stock.Add(new Weapon("Toporek fantastyczny", 200f, CountryOfOrigin.China, WeaponType.BattleAxe));
@@ -34,22 +39,39 @@ namespace Data
         public void AddWeapons(List<IWeapon> weapons)
         {
             foreach(var weapon in weapons) 
-            {
-                AddWeapon(weapon);
-            }
+                AddSingleWeapon(weapon);
         }
         
-        public void AddWeapon(IWeapon weapon)
+        public void AddSingleWeapon(IWeapon weapon)
         {
-            Stock.Add(weapon);
             foreach(var observer in observers)
-            {
                 observer.OnNext(weapon);
-            }
+            
+            if (Stock.Find(x => x.Id == weapon.Id) != null)
+                return;
+
+            Stock.Add(weapon);
         }
         public void RemoveWeapons(List<IWeapon> weapons)
         {
-            weapons.ForEach(weapon => Stock.Remove(weapon));
+            foreach (var weapon in weapons)
+                RemoveSingleWeapon(weapon);
+        }
+
+        public void RemoveSingleWeapon(IWeapon weapon)
+        {
+            if (Stock.Find(x => x.Id == weapon.Id) == null) 
+                return;
+
+            Stock.Remove(weapon);
+
+            weapon.Name = "";
+            weapon.Price = -1f;
+            weapon.Type = WeaponType.Deleted;
+            weapon.Origin = CountryOfOrigin.Deleted;
+
+            foreach (var observer in observers)
+                observer.OnNext(weapon);
         }
 
         public List<IWeapon> GetWeaponsOfType(WeaponType type)
@@ -107,19 +129,26 @@ namespace Data
             await WebSocketClient.CurrentConnection.SendAsync("RequestAll");
         }
 
-        private async void ParseMessage(string message)
+        private void ParseMessage(string message)
         {
             if (message.Contains("UpdateAll"))
             {
-                var json = message.Substring("UpdateAll".Length);
-                var weapons = Serializer.JSONToWarehouse(json);
+                string json = message.Substring("UpdateAll".Length);
+                List<IWeapon> weapons = Serializer.JSONToWarehouse(json);
                 foreach (var weapon in weapons) 
-                { 
-                    AddWeapon(weapon);
-                }
+                    AddSingleWeapon(weapon);
                 waitingForStockUpdate = false;
             }
+            else if (message.Contains("TransactionResult"))
+            {
+                string resString = message.Substring("TransactionResult".Length);
+                transactionSuccess = bool.Parse(resString);
+                waitingForSellResponse = false;
+                if (!transactionSuccess)
+                    RequestWeaponsUpdate();
+            }
         }
+
         private async void Connected()
         {
             WebSocketClient.CurrentConnection.OnMessage = ParseMessage;
@@ -131,6 +160,17 @@ namespace Data
             if (!observers.Contains(observer))
                 observers.Add(observer);
             return new Unsubscriber(observers, observer);
+        }
+
+        public async Task<bool> TryBuying(List<IWeapon> weapons)
+        {
+            waitingForSellResponse = true;
+            string json = Serializer.WarehouseToJSON(weapons);
+            await WebSocketClient.CurrentConnection.SendAsync($"Buying weapons {json}");
+
+            while (waitingForSellResponse) { }
+
+            return transactionSuccess;
         }
 
         private class Unsubscriber : IDisposable

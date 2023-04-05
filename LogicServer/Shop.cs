@@ -21,26 +21,18 @@ namespace LogicServer
             warehouse.PriceChange += OnPriceChanged;
         }
 
-        public List<IWeaponDTO> GetWeapons(bool onSale = true)
+        public List<IWeaponDTO> GetWeapons()
         {
-            Tuple<Guid, float> sale = new Tuple<Guid, float>(Guid.Empty, 1f);
-            if (onSale)
-                sale = specialOffer.GetSpecialOffer();
-                
             List<IWeaponDTO> availableWeapons = new List<IWeaponDTO>();
 
             foreach (IWeapon weapon in warehouse.Stock)
             {
-                float price = weapon.Price;
-                if (weapon.Id.Equals(sale.Item1))
-                    price *= sale.Item2;
-
                 var dto = new WeaponDTO();
                 dto.Name = weapon.Name;
-                dto.Price = price;
+                dto.Price = weapon.Price;
                 dto.Id = weapon.Id;
-                dto.Type = weapon.Type.ToString();
-                dto.Origin = weapon.Origin.ToString();
+                dto.Type = (int)weapon.Type;
+                dto.Origin = (int)weapon.Origin;
 
                 availableWeapons.Add(dto);
             }
@@ -56,6 +48,15 @@ namespace LogicServer
                 weaponIds.Add(weapon.Id);
 
             List<IWeapon> weaponsDataLayer = warehouse.GetWeaponsByID(weaponIds);
+            if (weaponsDataLayer.Count != weapons.Count)
+                return false;
+
+            foreach (IWeaponDTO weaponDTO in weapons)
+            {
+                var warehouseWeapon = weaponsDataLayer.First(x => x.Id == weaponDTO.Id);
+                if (warehouseWeapon.Price != weaponDTO.Price)
+                    return false;
+            }
 
             warehouse.RemoveWeapons(weaponsDataLayer);
 

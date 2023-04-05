@@ -11,6 +11,7 @@ namespace Data
         Katana,
         WarHammer,
         BattleAxe,
-        TwoHandedSword
+        TwoHandedSword,
+        Deleted
     }
 }

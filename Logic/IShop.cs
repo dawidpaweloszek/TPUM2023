@@ -9,9 +9,10 @@ namespace Logic
     {
         public event EventHandler<PriceChangeEventArgs> PriceChanged;
         public event EventHandler<IWeaponDTO> OnWeaponChanged;
+        public event EventHandler<IWeaponDTO> OnWeaponRemoved;
 
-        List<IWeaponDTO> GetWeapons(bool onSale = true);
-        bool Sell(List<IWeaponDTO> weapons);
+        List<IWeaponDTO> GetWeapons();
+        public Task<bool> Sell(List<IWeaponDTO> weapons);
         public Task SendMessageAsync(string mesg);
     }
 }

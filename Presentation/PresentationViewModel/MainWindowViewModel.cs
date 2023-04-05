@@ -21,14 +21,11 @@ namespace PresentationViewModel
     {
         #region public API
 
-        public MainWindowViewModel() : this(ModelAbstractApi.CreateApi())
-        {
-        }
+        public MainWindowViewModel() : this(ModelAbstractApi.CreateApi()) { }
 
         public MainWindowViewModel(ModelAbstractApi modelAbstractApi)
         {
             ModelLayer = modelAbstractApi;
-            Radious = ModelLayer.Radius;
             ColorString = ModelLayer.ColorString;
             MainViewVisibility = ModelLayer.MainViewVisibility;
             ShoppingCartViewVisibility = ModelLayer.ShoppingCartViewVisibility;
@@ -40,7 +37,6 @@ namespace PresentationViewModel
             ModelLayer.WarehousePresentation.PriceChanged += OnPriceChanged;
             ModelLayer.WarehousePresentation.WeaponChanged += OnWeaponChanged;
             shoppingCart = ModelLayer.ShoppingCart;
-            ButtomClick = new GalaSoft.MvvmLight.Command.RelayCommand(() => ClickHandler());
             ShoppingCartButtonClick = new GalaSoft.MvvmLight.Command.RelayCommand(() => ShoppingCartButtonClickHandler());
             MainPageButtonClick = new GalaSoft.MvvmLight.Command.RelayCommand(() => MainPageButtonClickHandler());
             AxesButtonClick = new GalaSoft.MvvmLight.Command.RelayCommand(() => AxesButtonClickHandler());
@@ -64,15 +60,20 @@ namespace PresentationViewModel
             if (weapon != null)
             {
                 int weaponIndex = newWeapons.IndexOf(weapon);
-                newWeapons[weaponIndex].Name = e.Name;
-                newWeapons[weaponIndex].Id = e.Id;
-                newWeapons[weaponIndex].Price = e.Price;
-                newWeapons[weaponIndex].Type = e.Type;
+                
+                if (e.Type.ToLower() == "deleted")
+                    newWeapons.RemoveAt(weaponIndex);
+                else
+                {
+                    newWeapons[weaponIndex].Name = e.Name;
+                    newWeapons[weaponIndex].Price = e.Price;
+                    newWeapons[weaponIndex].Id = e.Id;
+                    newWeapons[weaponIndex].Type = e.Type;
+                }
             }
             else
-            {
                 newWeapons.Add(e);
-            }
+            
             Weapons = new ObservableCollection<WeaponPresentation>(newWeapons);
         }
 
@@ -87,10 +88,7 @@ namespace PresentationViewModel
 
         public string ColorString
         {
-            get
-            {
-                return b_colorString;
-            }
+            get { return b_colorString; }
             set
             {
                 if (value.Equals(b_colorString))
@@ -102,10 +100,7 @@ namespace PresentationViewModel
 
         public string ConnectButtonText
         {
-            get
-            {
-                return b_connectButtonText;
-            }
+            get { return b_connectButtonText; }
             set
             {
                 if (value.Equals(b_connectButtonText))
@@ -117,10 +112,7 @@ namespace PresentationViewModel
 
         public string MainViewVisibility
         {
-            get
-            {
-                return b_mainViewVisibility;
-            }
+            get { return b_mainViewVisibility; }
             set
             {
                 if (value.Equals(b_mainViewVisibility))
@@ -132,10 +124,7 @@ namespace PresentationViewModel
 
         public string ShoppingCartViewVisibility
         {
-            get
-            {
-                return b_shoppingCartViewVisibility;
-            }
+            get { return b_shoppingCartViewVisibility; }
             set
             {
                 if (value.Equals(b_shoppingCartViewVisibility))
@@ -147,10 +136,7 @@ namespace PresentationViewModel
 
         public float ShoppingCartSum
         {
-            get
-            {
-                return shoppingCartSum;
-            }
+            get { return shoppingCartSum; }
             set
             {
                 if (value.Equals(shoppingCartSum))
@@ -160,12 +146,21 @@ namespace PresentationViewModel
             }
         }
 
+        public string TransactionStatusText
+        {
+            get { return transactionStatusText; }
+            set 
+            {
+                if (value.Equals(transactionStatusText))
+                    return;
+                transactionStatusText = value;
+                RaisePropertyChanged("Transaction Status Text");
+            }
+        }
+
         public ShoppingCart ShoppingCart
         {
-            get
-            {
-                return shoppingCart;
-            }
+            get { return shoppingCart; }
             set
             {
                 if (value.Equals(shoppingCart))
@@ -174,12 +169,10 @@ namespace PresentationViewModel
                 RaisePropertyChanged("ShoppingCart");
             }
         }
+
         public IList<object> CirclesCollection
         {
-            get
-            {
-                return b_CirclesCollection;
-            }
+            get { return b_CirclesCollection; }
             set
             {
                 if (value.Equals(b_CirclesCollection))
@@ -190,31 +183,13 @@ namespace PresentationViewModel
 
         public ObservableCollection<WeaponPresentation> Weapons
         {
-            get
-            {
-                return weapons;
-            }
+            get { return weapons; }
             set
             {
                 if (value.Equals(weapons))
                     return;
                 weapons = value;
                 RaisePropertyChanged("Weapons");
-            }
-        }
-
-        public int Radious
-        {
-            get
-            {
-                return b_Radious;
-            }
-            set
-            {
-                if (value.Equals(b_Radious))
-                    return;
-                b_Radious = value;
-                RaisePropertyChanged("Radious");
             }
         }
 
@@ -228,13 +203,6 @@ namespace PresentationViewModel
         public ICommand WeaponButtonClick { get; set; }
         public ICommand BuyButtonClick { get; set; }
         public ICommand ConnectButtonClick { get; set; }
-
-        private void ClickHandler()
-        {
-            // do something usefull
-            Radious *= 2;
-            ColorString = "Magenta";
-        }
 
         private async Task ConnectButtonClickHandler()
         {
@@ -252,9 +220,10 @@ namespace PresentationViewModel
             }
         }
 
-        private void BuyButtonClickHandler()
+        private async void BuyButtonClickHandler()
         {
-            ShoppingCart.Buy();
+            bool result = await ShoppingCart.Buy();
+            TransactionStatusText = result ? "success" : "fail";
             ShoppingCartSum = ShoppingCart.Sum();
             Weapons.Clear();
             foreach (WeaponPresentation weapon in ModelLayer.WarehousePresentation.GetWeapons())
@@ -338,14 +307,13 @@ namespace PresentationViewModel
         private ShoppingCart shoppingCart;
         private float shoppingCartSum;
         private ObservableCollection<WeaponPresentation> weapons;
-        private Timer timer;
-        private int b_Radious;
         private string b_colorString;
         private string b_mainViewVisibility;
         private string b_shoppingCartViewVisibility;
         private ModelAbstractApi ModelLayer;
         private IConnectionService ConnectionService;
         private string b_connectButtonText;
+        private string transactionStatusText;
 
         #endregion private
 

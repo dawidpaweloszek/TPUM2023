@@ -8,7 +8,7 @@ namespace LogicServer
     {
         public event EventHandler<PriceChangeEventArgs> PriceChanged;
 
-        List<IWeaponDTO> GetWeapons(bool onSale = true);
+        List<IWeaponDTO> GetWeapons();
         bool Sell(List<IWeaponDTO> weapons);
     }
 }

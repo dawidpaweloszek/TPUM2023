@@ -36,15 +36,19 @@ namespace PresentationServer
         {
             Console.WriteLine($"[Client]: {message}");
             if (message == "main page button click")
-            {
                 await SendMessageAsync("main page button click response");
-            }
 
             if (message == "RequestAll")
-            {
                 await SendCurrentWarehouseState();
-            }
             
+            if (message.Contains("RequestTransaction"))
+            {
+                var json = message.Substring("RequestTransaction".Length);
+                var weaponsToBuy = Serializer.JSONToWarehouse(json);
+                bool sellResult = shop.Sell(weaponsToBuy);
+
+                await SendMessageAsync($"[Result]: {sellResult}");
+            }
         }
 
         static async Task SendCurrentWarehouseState()
