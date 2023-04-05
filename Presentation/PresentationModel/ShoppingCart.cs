@@ -47,7 +47,7 @@ namespace PresentationModel
                 shoppingList.Add(weapon);
             }
 
-            await Shop.Sell(shoppingList);
+            Task.Run(async () => await Shop.Sell(shoppingList));
             Weapons.Clear();
         }
     }

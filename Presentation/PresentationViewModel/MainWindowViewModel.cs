@@ -249,16 +249,13 @@ namespace PresentationViewModel
 
         private void BuyButtonClickHandler()
         {
-            Task.Run(async () =>
+            ShoppingCart.Buy();
+            ShoppingCartSum = ShoppingCart.Sum();
+            Weapons.Clear();
+            foreach (WeaponPresentation weapon in ModelLayer.WarehousePresentation.GetWeapons())
             {
-                await ShoppingCart.Buy();
-                ShoppingCartSum = ShoppingCart.Sum();
-                Weapons.Clear();
-                foreach (WeaponPresentation weapon in ModelLayer.WarehousePresentation.GetWeapons())
-                {
-                    Weapons.Add(weapon);
-                }
-            });
+                Weapons.Add(weapon);
+            }
         }
         private void ShoppingCartButtonClickHandler()
         {
@@ -324,6 +321,8 @@ namespace PresentationViewModel
         {
             ShoppingCartViewVisibility = "Hidden";
             MainViewVisibility = "Visible";
+
+            TransactionStatusText = "";
 
             ModelLayer.WarehousePresentation.SendMessageAsync("main page button click");
         }
