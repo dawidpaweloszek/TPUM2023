@@ -4,10 +4,10 @@ namespace Data
 {
     public interface IWeapon
     {
-        string Name { get; set; }
-        float Price { get; set; }
-        Guid Id { get; }
-        CountryOfOrigin Origin { get; set; }
-        WeaponType Type { get; set; }
+        public string Name { get; set; }
+        public float Price { get; set; }
+        public Guid Id { get; }
+        public CountryOfOrigin Origin { get; set; }
+        public WeaponType Type { get; set; }
     }
 }

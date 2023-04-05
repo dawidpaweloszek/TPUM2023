@@ -47,7 +47,7 @@ namespace PresentationServer
                 var weaponsToBuy = Serializer.JSONToWarehouse(json);
                 bool sellResult = shop.Sell(weaponsToBuy);
 
-                await SendMessageAsync($"[Result]: {sellResult}");
+                await SendMessageAsync("TransactionResult" + sellResult.ToString());
             }
         }
 

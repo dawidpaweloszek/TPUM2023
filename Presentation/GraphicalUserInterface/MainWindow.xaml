@@ -70,9 +70,9 @@
                     </ScrollViewer>
                 </StackPanel>
                 <StackPanel Orientation="Horizontal">
-                    <Button Content="Kup" Width="300" Height="200" FontSize="36" Margin="30" Command= "{Binding BuyButtonClick}"></Button>
+                    <Button Content="Kup" Width="100" Height="200" FontSize="36" Margin="30" Command= "{Binding BuyButtonClick}"></Button>
                     <TextBlock VerticalAlignment="Center" FontSize="48" Margin="100 0" Text="{Binding ShoppingCartSum, StringFormat='0. PLN'}"></TextBlock>
-                    <TextBlock VerticalAlignment="Center" FontSize="24" Margin="100 0" Text="{Binding TransactionStatusText}"></TextBlock>
+                    <TextBlock VerticalAlignment="Center" FontSize="24" Margin="100 0" Text="{Binding TransactionStatusText}" Width="100"></TextBlock>
                 </StackPanel>
 
             </StackPanel>

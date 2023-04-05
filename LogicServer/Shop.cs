@@ -44,7 +44,7 @@ namespace LogicServer
         {
             List<Guid> weaponIds = new List<Guid>();
 
-            foreach (WeaponDTO weapon in weapons) 
+            foreach (var weapon in weapons) // TODO: @Dawid - check this one later
                 weaponIds.Add(weapon.Id);
 
             List<IWeapon> weaponsDataLayer = warehouse.GetWeaponsByID(weaponIds);

@@ -52,6 +52,7 @@ namespace Data
 
             Stock.Add(weapon);
         }
+
         public void RemoveWeapons(List<IWeapon> weapons)
         {
             foreach (var weapon in weapons)
@@ -166,7 +167,7 @@ namespace Data
         {
             waitingForSellResponse = true;
             string json = Serializer.WarehouseToJSON(weapons);
-            await WebSocketClient.CurrentConnection.SendAsync($"Buying weapons {json}");
+            await WebSocketClient.CurrentConnection.SendAsync("RequestTransaction" + json);
 
             while (waitingForSellResponse) { }
 
