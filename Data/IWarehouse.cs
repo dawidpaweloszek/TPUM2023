@@ -7,6 +7,8 @@ namespace Data
     public interface IWarehouse : IObservable<IWeapon>
     {
         public event EventHandler<PriceChangeEventArgs> PriceChange;
+        public event EventHandler TransactionFailed;
+        public event EventHandler<List<IWeapon>> TransactionSucceeded;
 
         public List<IWeapon> Stock { get; }
         public void AddWeapons(List<IWeapon> weapons);
@@ -18,6 +20,6 @@ namespace Data
 
         public Task SendAsync(string mesg);
         public Task RequestWeaponsUpdate();
-        Task<bool> TryBuying(List<IWeapon> weapons);
+        Task TryBuying(List<IWeapon> weapons);
     }
 }

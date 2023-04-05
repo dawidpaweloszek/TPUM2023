@@ -15,6 +15,28 @@ namespace PresentationModel
             Shop = shop;
             Shop.PriceChanged += OnPriceChanged;
             Shop.OnWeaponChanged += OnWeaponChanged;
+            Shop.TransactionFailed += OnTransactionFailed;
+            Shop.TransactionSucceeded += OnTransactionSucceeded;
+        }
+
+        private void OnTransactionSucceeded(object? sender, List<IWeaponDTO> e)
+        {
+            EventHandler<List<WeaponPresentation>> handler = TransactionSucceeded;
+            List<WeaponPresentation> soldWeaponPresentations = new List<WeaponPresentation>();
+            foreach (IWeaponDTO weaponDTO in e)
+            {
+                WeaponPresentation WeaponPresentation = new WeaponPresentation(weaponDTO.Name, weaponDTO.Price, weaponDTO.Id,
+                    weaponDTO.Origin, weaponDTO.Type);
+                soldWeaponPresentations.Add(WeaponPresentation);
+            }
+
+            handler?.Invoke(this, soldWeaponPresentations);
+        }
+
+        private void OnTransactionFailed(object? sender, EventArgs e)
+        {
+            EventHandler handler = TransactionFailed;
+            handler?.Invoke(this, e);
         }
 
         private void OnWeaponChanged(object? sender, IWeaponDTO e)
@@ -46,5 +68,7 @@ namespace PresentationModel
 
         public event EventHandler<PresentationModel.PriceChangeEventArgs> PriceChanged;
         public event EventHandler<WeaponPresentation> WeaponChanged;
+        public event EventHandler<List<WeaponPresentation>> TransactionSucceeded;
+        public event EventHandler TransactionFailed;
     }
 }

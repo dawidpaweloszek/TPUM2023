@@ -36,6 +36,9 @@ namespace PresentationViewModel
             }
             ModelLayer.WarehousePresentation.PriceChanged += OnPriceChanged;
             ModelLayer.WarehousePresentation.WeaponChanged += OnWeaponChanged;
+
+            ModelLayer.WarehousePresentation.TransactionFailed += OnTransactionFailed;
+            ModelLayer.WarehousePresentation.TransactionSucceeded += OnTransactionSucceeded;
             shoppingCart = ModelLayer.ShoppingCart;
             ShoppingCartButtonClick = new GalaSoft.MvvmLight.Command.RelayCommand(() => ShoppingCartButtonClickHandler());
             MainPageButtonClick = new GalaSoft.MvvmLight.Command.RelayCommand(() => MainPageButtonClickHandler());
@@ -52,6 +55,15 @@ namespace PresentationViewModel
             ConnectionService = ServiceFactory.CreateConnectionService;
         }
 
+        private void OnTransactionSucceeded(object? sender, List<WeaponPresentation> e)
+        {
+            TransactionStatusText = "Bron zakupiona";
+        }
+
+        private void OnTransactionFailed(object? sender, EventArgs e)
+        {
+            TransactionStatusText = "Bron nie zostala kupiona";
+        }
         private void OnWeaponChanged(object? sender, WeaponPresentation e)
         {
             ObservableCollection<WeaponPresentation> newWeapons = new ObservableCollection<WeaponPresentation>(Weapons);
@@ -222,8 +234,7 @@ namespace PresentationViewModel
 
         private async void BuyButtonClickHandler()
         {
-            bool result = await ShoppingCart.Buy();
-            TransactionStatusText = result ? "success" : "fail";
+            ShoppingCart.Buy();
             ShoppingCartSum = ShoppingCart.Sum();
             Weapons.Clear();
             foreach (WeaponPresentation weapon in ModelLayer.WarehousePresentation.GetWeapons())

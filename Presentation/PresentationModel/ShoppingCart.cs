@@ -35,7 +35,7 @@ namespace PresentationModel
             return res;
         }
 
-        public async Task<bool> Buy()
+        public async Task Buy()
         {
             List<IWeaponDTO> shoppingList = new List<IWeaponDTO>();
 
@@ -43,10 +43,8 @@ namespace PresentationModel
             foreach (WeaponPresentation weaponPresentation in Weapons)
                 shoppingList.Add(Shop.GetWeapons().FirstOrDefault(x => x.Id == weaponPresentation.Id));
 
-            bool res = await Shop.Sell(shoppingList);
+            await Shop.Sell(shoppingList);
             Weapons.Clear();
-
-            return res;
         }
     }
 }

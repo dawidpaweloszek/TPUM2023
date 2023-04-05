@@ -11,6 +11,8 @@ namespace Data
     internal class Warehouse : IWarehouse
     {
         public event EventHandler<PriceChangeEventArgs> PriceChange;
+        public event EventHandler TransactionFailed;
+        public event EventHandler<List<IWeapon>> TransactionSucceeded;
         private bool waitingForStockUpdate;
         private bool waitingForSellResponse;
         private bool transactionSuccess;
@@ -28,10 +30,10 @@ namespace Data
             transactionSuccess = false;
 
             // TODO: @Ignacy - temporary we can add weapons here
-            Stock.Add(new Weapon("Toporek fantastyczny", 200f, CountryOfOrigin.China, WeaponType.BattleAxe));
+            /*Stock.Add(new Weapon("Toporek fantastyczny", 200f, CountryOfOrigin.China, WeaponType.BattleAxe));
             Stock.Add(new Weapon("Młotek fantastyczny ", 300.5f, CountryOfOrigin.Germany, WeaponType.WarHammer));
             Stock.Add(new Weapon("Katana fajowska     ", 1000f, CountryOfOrigin.Japan, WeaponType.Katana));
-            Stock.Add(new Weapon("Miecz taki polski      ", 250f, CountryOfOrigin.Poland, WeaponType.TwoHandedSword));
+            Stock.Add(new Weapon("Miecz taki polski      ", 250f, CountryOfOrigin.Poland, WeaponType.TwoHandedSword));*/
             WebSocketClient.OnConnected += Connected;
 
         }
@@ -143,10 +145,19 @@ namespace Data
             else if (message.Contains("TransactionResult"))
             {
                 string resString = message.Substring("TransactionResult".Length);
-                transactionSuccess = bool.Parse(resString);
-                waitingForSellResponse = false;
+                transactionSuccess = resString[0] == '1';
+
                 if (!transactionSuccess)
+                {
+                    EventHandler handler = TransactionFailed;
+                    handler?.Invoke(this, EventArgs.Empty);
                     RequestWeaponsUpdate();
+                }
+                else
+                {
+                    EventHandler<List<IWeapon>> handler = TransactionSucceeded;
+                    handler?.Invoke(this, Serializer.JSONToWarehouse(resString.Substring(1)));
+                }
             }
         }
 
@@ -163,15 +174,11 @@ namespace Data
             return new Unsubscriber(observers, observer);
         }
 
-        public async Task<bool> TryBuying(List<IWeapon> weapons)
+        public async Task TryBuying(List<IWeapon> weapons)
         {
             waitingForSellResponse = true;
             string json = Serializer.WarehouseToJSON(weapons);
             await WebSocketClient.CurrentConnection.SendAsync("RequestTransaction" + json);
-
-            while (waitingForSellResponse) { }
-
-            return transactionSuccess;
         }
 
         private class Unsubscriber : IDisposable

@@ -12,6 +12,8 @@ namespace Logic
         public event EventHandler<PriceChangeEventArgs> PriceChanged;
         public event EventHandler<IWeaponDTO> OnWeaponChanged;
         public event EventHandler<IWeaponDTO> OnWeaponRemoved;
+        public event EventHandler TransactionFailed;
+        public event EventHandler<List<IWeaponDTO>> TransactionSucceeded;
 
         private IWarehouse warehouse;
         private IDisposable unsubscriber;
@@ -20,7 +22,36 @@ namespace Logic
         {
             this.warehouse = warehouse;
             warehouse.PriceChange += OnPriceChanged;
+            warehouse.TransactionFailed += OnTransactionFailed;
+            warehouse.TransactionSucceeded += OnTransactionSucceeded;
             warehouse.Subscribe(this);
+        }
+
+        private void OnTransactionSucceeded(object? sender, List<IWeapon> e)
+        {
+            warehouse.RemoveWeapons(e);
+            EventHandler<List<IWeaponDTO>> handler = TransactionSucceeded;
+            List<IWeaponDTO> soldWeapons = new List<IWeaponDTO>();
+
+            foreach (IWeapon weapon in e)
+            {
+                WeaponDTO weaponDTO = new WeaponDTO();
+                weaponDTO.Type = weapon.Type.ToString();
+                weaponDTO.Id = weapon.Id;
+                weaponDTO.Name = weapon.Name;
+                weaponDTO.Origin = weapon.Origin.ToString();
+                weaponDTO.Price = weapon.Price;
+
+                soldWeapons.Add(weaponDTO);
+            }
+
+            handler?.Invoke(this, soldWeapons);
+        }
+
+        private void OnTransactionFailed(object? sender, EventArgs e)
+        {
+            EventHandler handler = TransactionFailed;
+            handler?.Invoke(this, e);
         }
 
         public List<IWeaponDTO> GetWeapons()
@@ -42,7 +73,7 @@ namespace Logic
             return availableWeapons;
         }
 
-        public async Task<bool> Sell(List<IWeaponDTO> weapons)
+        public async Task Sell(List<IWeaponDTO> weapons)
         {
             List<Guid> weaponIds = new List<Guid>();
 
@@ -50,12 +81,7 @@ namespace Logic
                 weaponIds.Add(weapon.Id);
 
             List<IWeapon> weaponsDataLayer = warehouse.GetWeaponsByID(weaponIds);
-            bool result = await warehouse.TryBuying(weaponsDataLayer);
-
-            if (result)
-                warehouse.RemoveWeapons(weaponsDataLayer);
-
-            return result;
+            await warehouse.TryBuying(weaponsDataLayer);
         }
 
         private void OnPriceChanged(object sender, Data.PriceChangeEventArgs e) 
