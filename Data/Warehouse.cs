@@ -46,13 +46,17 @@ namespace Data
         
         public void AddSingleWeapon(IWeapon weapon)
         {
+            IWeapon old = Stock.Find(x => x.Id == weapon.Id);
+            if (old == null)
+                Stock.Add(weapon);
+            else
+            {
+                Stock.Remove(old);
+                Stock.Add(weapon);
+            }
+
             foreach(var observer in observers)
                 observer.OnNext(weapon);
-            
-            if (Stock.Find(x => x.Id == weapon.Id) != null)
-                return;
-
-            Stock.Add(weapon);
         }
 
         public void RemoveWeapons(List<IWeapon> weapons)

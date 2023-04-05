@@ -8,6 +8,10 @@ namespace PresentationModel
     {
         public Task SendMessageAsync(string message);
         public List<WeaponPresentation> GetWeapons();
+        public Task<bool> Connect(Uri uri);
+        public Task Disconnect();
+        public bool IsConnected();
+
         public event EventHandler<PriceChangeEventArgs> PriceChanged;
         public event EventHandler<WeaponPresentation> WeaponChanged;
         public event EventHandler<WeaponPresentation> WeaponRemoved;

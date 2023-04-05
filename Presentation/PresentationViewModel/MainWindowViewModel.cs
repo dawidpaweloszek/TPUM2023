@@ -49,8 +49,6 @@ namespace PresentationViewModel
             WeaponButtonClick = new RelayCommand<Guid>((id) => WeaponButtonClickHandler(id));
 
             ConnectButtonClick = new GalaSoft.MvvmLight.Command.RelayCommand(() => ConnectButtonClickHandler());
-            connectionService = ServiceFactory.CreateConnectionService;
-            connectionService.ConnectionLogger += s => Log = s;
         }
 
         private void OnWeaponRemoved(object? sender, WeaponPresentation e)
@@ -218,10 +216,10 @@ namespace PresentationViewModel
 
         private async Task ConnectButtonClickHandler()
         {
-            if (!connectionService.Connected)
+            if (!modelLayer.WarehousePresentation.IsConnected())
             {
                 ConnectButtonText = "łączenie";
-                bool result = await connectionService.Connect(new Uri("ws://localhost:8081"));
+                bool result = await modelLayer.WarehousePresentation.Connect(new Uri("ws://localhost:8081"));
 
                 if (result)
                 {
@@ -233,7 +231,7 @@ namespace PresentationViewModel
             }
             else
             {
-                await connectionService.Disconnect();
+                await modelLayer.WarehousePresentation.Disconnect();
                 ConnectButtonText = "rozłączono";
                 Weapons.Clear();
             }
@@ -329,7 +327,6 @@ namespace PresentationViewModel
         private string mainViewVisibility;
         private string shoppingCartViewVisibility;
         private ModelAbstractApi modelLayer;
-        private IConnectionService connectionService;
         private string connectButtonText;
         private string transactionStatusText;
         private string log = "Waiting for connection logs...";
