@@ -348,3 +348,35 @@ MigrationBackup/
 
 # Ionide (cross platform F# VS Code tools) working folder
 .ionide/
+OPCModel/BuildModel.bat
+OPCModel/mdc30101.exe/BouncyCastle.Crypto.dll
+OPCModel/mdc30101.exe/BouncyCastle.Crypto.xml
+OPCModel/mdc30101.exe/CommandLine.dll
+OPCModel/mdc30101.exe/CommandLine.xml
+OPCModel/mdc30101.exe/mdc.exe
+OPCModel/mdc30101.exe/mdc.exe.config
+OPCModel/mdc30101.exe/Microsoft.Extensions.Logging.Abstractions.dll
+OPCModel/mdc30101.exe/Microsoft.Extensions.Logging.Abstractions.xml
+OPCModel/mdc30101.exe/Newtonsoft.Json.dll
+OPCModel/mdc30101.exe/Newtonsoft.Json.xml
+OPCModel/mdc30101.exe/OOI.ModelCompiler.dll
+OPCModel/mdc30101.exe/OOI.ModelCompiler.xml
+OPCModel/mdc30101.exe/Opc.Ua.Core.dll
+OPCModel/mdc30101.exe/Opc.Ua.Core.xml
+OPCModel/mdc30101.exe/Opc.Ua.Security.Certificates.dll
+OPCModel/mdc30101.exe/Opc.Ua.Security.Certificates.xml
+OPCModel/mdc30101.exe/System.Buffers.dll
+OPCModel/mdc30101.exe/System.Buffers.xml
+OPCModel/mdc30101.exe/System.Formats.Asn1.dll
+OPCModel/mdc30101.exe/System.Formats.Asn1.xml
+OPCModel/mdc30101.exe/System.Memory.dll
+OPCModel/mdc30101.exe/System.Memory.xml
+OPCModel/mdc30101.exe/System.Numerics.Vectors.dll
+OPCModel/mdc30101.exe/System.Numerics.Vectors.xml
+OPCModel/mdc30101.exe/System.Runtime.CompilerServices.Unsafe.dll
+OPCModel/mdc30101.exe/System.Runtime.CompilerServices.Unsafe.xml
+OPCModel/mdc30101.exe/System.ValueTuple.dll
+OPCModel/mdc30101.exe/System.ValueTuple.xml
+OPCModel/mdc30101.exe/UAOOI.Common.Infrastructure.dll
+OPCModel/mdc30101.exe/UAOOI.Common.Infrastructure.xml
+OPCModel/mdc30101.exe/UAOOI.SemanticData.BuildingErrorsHandling.dll
