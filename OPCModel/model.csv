@@ -1,0 +1,6 @@
+IWeapon,3,ObjectType
+IWeapon_Id,4,Variable
+IWeapon_Name,5,Variable
+IWeapon_Price,6,Variable
+IWeapon_Origin,7,Variable
+IWeapon_WeaponType,8,Variable

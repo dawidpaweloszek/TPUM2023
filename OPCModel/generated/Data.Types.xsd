@@ -1,0 +1,12 @@
+<xs:schema
+  xmlns:cas="http://cas.eu/UA/CommServer/"
+  xmlns:xs="http://www.w3.org/2001/XMLSchema"
+  xmlns:ua="http://opcfoundation.org/UA/2008/02/Types.xsd"
+  xmlns:tns="http://smiths.com/TPUM2023/Shop/"
+  targetNamespace="http://smiths.com/TPUM2023/Shop/"
+  elementFormDefault="qualified"
+>
+  <xs:import namespace="http://cas.eu/UA/CommServer/" />
+  <xs:import namespace="http://opcfoundation.org/UA/2008/02/Types.xsd" />
+
+</xs:schema>
