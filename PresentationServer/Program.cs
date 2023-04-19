@@ -6,8 +6,10 @@ using System.Net;
 using System.Globalization;
 using System.Threading.Tasks;
 using DataServer;
+using System.Runtime.CompilerServices;
 using LogicServer;
 
+[assembly: InternalsVisibleTo("IntegrationTest")]
 namespace PresentationServer
 {
     internal class Program
@@ -17,15 +19,15 @@ namespace PresentationServer
 
         static async Task Main(string[] args)
         {
-            Console.WriteLine("Server started");
+            /*Console.WriteLine("Server started");
             logicLayer = ILogicLayer.Create();
             shop = logicLayer.Shop;
             shop.PriceChanged += async (sender, eventArgs) =>
             {
                 if (WebSocketServer.CurrentConnection != null)
                     await SendMessageAsync("PriceChanged" + eventArgs.Price.ToString() + "/" + eventArgs.Id.ToString());
-            };
-            await WebSocketServer.Server(8081, ConnectionHandler);
+            };*/
+            await CreateServer();
         }
 
         static void ConnectionHandler(WebSocketConnection webSocketConnection)
@@ -76,6 +78,18 @@ namespace PresentationServer
         {
             Console.WriteLine("[Server]: " + message);
             await WebSocketServer.CurrentConnection.SendAsync(message);
+        }
+        public static async Task CreateServer()
+        {
+            Console.WriteLine("Server started");
+            logicLayer = ILogicLayer.Create();
+            shop = logicLayer.Shop;
+            shop.PriceChanged += async (sender, eventArgs) =>
+            {
+                if (WebSocketServer.CurrentConnection != null)
+                    await SendMessageAsync("PriceChanged" + eventArgs.Price.ToString() + "/" + eventArgs.Id.ToString());
+            };
+            await WebSocketServer.Server(8081, ConnectionHandler);
         }
     }
 }
